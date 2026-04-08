@@ -1,37 +1,49 @@
-<!DOCTYPE html>
+$ edit /workspace/index.html
+edit /workspace/index.html
+ERROR:
+No replacement was performed, old_str `<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dungeons-And-Dragons</title>
+    <title>Brawl Stars Style Menu</title>
     <style>
-        /* --- ТВОЙ ФОН --- */
+        /* Основной контейнер фона */
         .animated-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -1; /* Чтобы фон был позади всего контента */
+            
+            /* Градиент с нужными цветами */
             background: linear-gradient(
                 -45deg, 
-                #ff9a3c,   
-                #ff5e62,   
-                #ff7eb9,   
-                #c471ed,   
-                #a259ff,   
-                #ff9a3c    
+                #ff9a3c,   /* Оранжевый */
+                #ff5e62,   /* Оранжево-розовый */
+                #ff7eb9,   /* Розовый */
+                #c471ed,   /* Светло-фиолетовый */
+                #a259ff,   /* Насыщенный фиолетовый */
+                #ff9a3c    /* Снова оранжевый для замыкания круга */
             );
+            
             background-size: 400% 400%;
             animation: gradientShift 10s ease infinite;
         }
-
+        /* Анимация переливания */
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
-
+        /* Дополнительный эффект пульсации (опционально) */
         .animated-background::before {
             content: '';
             position: absolute;
@@ -45,488 +57,690 @@
                 transparent 60%
             );
             animation: pulseOverlay 5s ease-in-out infinite alternate;
-            pointer-events: none;
+            pointer-events: none; /* Чтобы не мешал кликам */
         }
-
         @keyframes pulseOverlay {
             0% { opacity: 0.3; transform: scale(1); }
             100% { opacity: 0.6; transform: scale(1.1); }
-        }
-
-        /* --- ОСНОВНОЙ СТИЛЬ ИНТЕРФЕЙСА (Brawl Stars Style) --- */
+        } 
         body {
             margin: 0;
-            padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             overflow: hidden;
-            user-select: none;
-        }
-
-        /* Контейнер интерфейса */
-        .ui-container {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
         }
-
-        /* Верхняя панель (Ресурсы) */
+        /* Верхняя панель */
         .top-bar {
             display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            padding-top: 10px;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
-
-        .currency-card {
+        .currency-container {
+            display: flex;
+            gap: 15px;
+        }
+        .currency-item {
             background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #333;
-            border-radius: 10px;
-            padding: 5px 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.5);
-            min-width: 100px;
-            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-
         .currency-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            display: inline-block;
         }
-        .gem-icon { background: #00ffff; box-shadow: 0 0 5px #00ffff; }
-        .coin-icon { background: #ffd700; box-shadow: 0 0 5px #ffd700; }
-        .token-icon { background: #ff9a3c; box-shadow: 0 0 5px #ff9a3c; }
-
-        /* Центральная часть */
-        .main-stage {
-            flex-grow: 1;
+        /* Основной контент */
+        .main-content {
+            flex: 1;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 20px;
             position: relative;
         }
-
-        /* Область бойца / Рисования */
-        .character-area {
-            width: 300px;
-            height: 400px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Холст для рисования */
-        #drawCanvas {
-            background: rgba(255, 255, 255, 0.1);
-            border: 4px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            cursor: crosshair;
-            touch-action: none;
-            transition: all 0.3s;
-        }
-        
-        #drawCanvas.active {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #fff;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-
-        /* Картинка бойца (если не рисуем) */
-        .fighter-img {
-            max-width: 100%;
-            max-height: 100%;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
-            animation: float 3s ease-in-out infinite;
-            display: none; /* Скрыто по умолчанию */
-        }
-        .fighter-img.visible { display: block; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        /* Панель управления бойцом (слева от центра) */
-        .controls-panel {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+        /* Левая панель (Меню) */
+        .left-sidebar {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         .menu-btn {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(180deg, #4a90e2, #0056b3);
-            border: 3px solid #fff;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6e45e2, #88d3ce);
+            border: 3px solid white;
             border-radius: 15px;
+            cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #003d80, 0 10px 10px rgba(0,0,0,0.3);
-            transition: transform 0.1s, box-shadow 0.1s;
+            font-size: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             color: white;
             text-decoration: none;
         }
-
-        .menu-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 0 0 #003d80, inset 0 5px 10px rgba(0,0,0,0.3);
+        .menu-btn:hover {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
-
-        .menu-btn.shop { background: linear-gradient(180deg, #ff9a3c, #cc5500); box-shadow: 0 6px 0 #994000, 0 10px 10px rgba(0,0,0,0.3); }
-        .menu-btn.brawlers { background: linear-gradient(180deg, #ff5e62, #cc2233); box-shadow: 0 6px 0 #991122, 0 10px 10px rgba(0,0,0,0.3); }
-        .menu-btn.events { background: linear-gradient(180deg, #a259ff, #6622cc); box-shadow: 0 6px 0 #441188, 0 10px 10px rgba(0,0,0,0.3); }
-
-        /* Нижняя панель */
-        .bottom-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding-bottom: 20px;
-        }
-
-        /* Информация о бойце */
-        .fighter-info {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 15px 15px 0 0;
-            border: 2px solid rgba(255,255,255,0.2);
-            width: 300px;
-        }
-        .fighter-name {
-            font-size: 24px;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            color: #ffd700;
-            text-shadow: 2px 2px 0 #000;
-        }
-        .fighter-desc {
-            font-size: 14px;
-            color: #ddd;
-        }
-
-        /* Кнопка ИГРАТЬ */
-        .play-btn-container {
-            position: relative;
-        }
-
-        .play-btn {
-            background: linear-gradient(180deg, #ffd700, #ffaa00);
-            color: #4a3b00;
-            font-size: 32px;
-            font-weight: 900;
-            padding: 15px 60px;
-            border: 4px solid #fff;
-            border-radius: 10px;
-            transform: skew(-10deg);
-            cursor: pointer;
-            box-shadow: 0 8px 0 #cc8800, 0 15px 20px rgba(0,0,0,0.4);
-            transition: all 0.1s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .play-btn span {
-            display: block;
-            transform: skew(10deg); /* Возвращаем текст обратно */
-        }
-
-        .play-btn:hover {
-            transform: skew(-10deg) scale(1.05);
-            box-shadow: 0 10px 0 #cc8800, 0 20px 30px rgba(0,0,0,0.5);
-            filter: brightness(1.1);
-        }
-
-        .play-btn:active {
-            transform: skew(-10deg) translateY(8px) scale(0.98);
-            box-shadow: 0 0 0 #cc8800, inset 0 5px 10px rgba(0,0,0,0.2);
-        }
-
-        /* Инструменты рисования */
-        .drawing-tools {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.8);
-            padding: 10px;
-            border-radius: 15px;
+        /* Центр (Боец) */
+        .center-stage {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            border: 2px solid #555;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
-
-        .tool-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            border: 2px solid #fff;
-            cursor: pointer;
-            font-size: 20px;
+        .character-display {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #444;
-            color: white;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.2);
+            position: relative;
+            animation: float 3s ease-in-out infinite;
         }
-        .tool-btn.active { background: #ffd700; color: black; border-color: #fff; }
-        
-        .color-picker {
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .character-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+        }
+        .character-name {
+            margin-top: 20px;
+            font-size: 32px;
+            font-weight: 900;
+            text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        /* Правая панель (Инфо) */
+        .right-sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .stat-row {
+            margin-bottom: 15px;
+        }
+        .stat-label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .progress-bar {
+            height: 15px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+        /* Нижняя панель */
+        .bottom-bar {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+        .play-btn {
+            background: linear-gradient(180deg, #ffd700, #ff8c00);
+            border: 4px solid #fff;
+            color: #4a3b00;
+            font-size: 36px;
+            font-weight: 900;
+            padding: 15px 80px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 10px 0 #b8860b, 0 20px 20px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+            position: relative;
+            overflow: hidden;
+        }
+        .play-btn:active {
+            transform: translateY(10px);
+            box-shadow: 0 0 0 #b8860b, inset 0 5px 10px rgba(0,0,0,0.3);
+        }
+        .play-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+        /* Интерфейс создания/выбора */
+        .creation-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            background: rgba(20, 10, 40, 0.95);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+        .creation-panel.active {
+            display: flex;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .tab-btn.active {
+            background: #ffd700;
+            color: #4a3b00;
+        }
+        .tab-content {
+            flex: 1;
+            display: none;
+            overflow-y: auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Галерея */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        .gallery-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, border 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.2);
+        }
+        .gallery-item.selected {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px #ffd700;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+        }
+        .gallery-item p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            word-break: break-word;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+        }
+        .gallery-item:hover .delete-btn {
+            display: block;
+        }
+        /* Холст */
+        .canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+        canvas {
+            background: white;
+            border-radius: 10px;
+            cursor: crosshair;
+            touch-action: none;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .tools {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .color-btn {
             width: 30px;
             height: 30px;
             border-radius: 50%;
             border: 2px solid white;
             cursor: pointer;
+            transition: transform 0.2s;
         }
-
-        /* Переключатель режимов */
-        .mode-switch {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.6);
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: flex;
-            gap: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
+        .color-btn.active {
+            transform: scale(1.2);
+            border-color: #ffd700;
         }
-        .mode-option {
+        .action-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
             cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 10px;
             font-weight: bold;
-            font-size: 14px;
         }
-        .mode-option.active {
-            background: #ffd700;
-            color: #000;
+        
+        .action-btn.clear { background: #f44336; }
+        .action-btn.save { background: #2196F3; }
+        .close-panel {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
         }
-
+        
+        .close-panel:hover { background: red; }
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .main-content { flex-direction: column; }
+            .left-sidebar { flex-direction: row; order: 2; margin-top: 20px; }
+            .right-sidebar { display: none; }
+            .character-display { width: 200px; height: 200px; }
+            .play-btn { font-size: 24px; padding: 10px 40px; }
+            .creation-panel { width: 95%; height: 90%; }
+        }
     </style>
 </head>
 <body>
-
-    <!-- Твой фон -->
+    <!-- Фон -->
     <div class="animated-background"></div>
-
-    <div class="ui-container">
-        
-        <!-- Верхняя панель -->
-        <div class="top-bar">
-            <div class="currency-card">
-                <span class="currency-icon gem-icon"></span>
-                <span id="gem-count">1450</span>
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <div class="player-info">
+            <span style="font-weight:bold; font-size: 18px;">Игрок: Герой</span>
+            <div style="font-size: 12px; opacity: 0.8;">Уровень 15</div>
+        </div>
+        <div class="currency-container">
+            <div class="currency-item">
+                <div class="currency-icon" style="background: gold;"></div>
+                <span id="gold-count">1250</span>
             </div>
-            <div class="currency-card">
-                <span class="currency-icon coin-icon"></span>
-                <span id="coin-count">3200</span>
+            <div class="currency-item">
+                <div class="currency-icon" style="background: cyan;"></div>
+                <span id="gem-count">45</span>
             </div>
-            <div class="currency-card">
-                <span class="currency-icon token-icon"></span>
-                <span id="token-count">850</span>
+            <div class="currency-item">
+                <div class="currency-icon" style="background: silver;"></div>
+                <span id="token-count">320</span>
             </div>
         </div>
-
-        <!-- Центральная сцена -->
-        <div class="main-stage">
-            
-            <!-- Левое меню -->
-            <div class="controls-panel">
-                <div class="menu-btn shop">🛒</div>
-                <div class="menu-btn brawlers">🤠</div>
-                <div class="menu-btn events">📅</div>
-            </div>
-
-            <!-- Область персонажа -->
-            <div class="character-area">
-                
-                <!-- Переключатель -->
-                <div class="mode-switch">
-                    <div class="mode-option active" onclick="setMode('gallery')">Галерея</div>
-                    <div class="mode-option" onclick="setMode('draw')">Рисование</div>
-                </div>
-
-                <!-- Холст -->
-                <canvas id="drawCanvas" width="300" height="400"></canvas>
-                
-                <!-- Пример бойца (SVG заглушка) -->
-                <svg class="fighter-img visible" id="defaultFighter" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Простой робот -->
-                    <circle cx="100" cy="80" r="40" fill="#00ffff" stroke="white" stroke-width="3"/>
-                    <rect x="60" y="120" width="80" height="60" rx="10" fill="#0099cc" stroke="white" stroke-width="3"/>
-                    <circle cx="85" cy="70" r="5" fill="white"/>
-                    <circle cx="115" cy="70" r="5" fill="white"/>
-                    <path d="M 90 90 Q 100 100 110 90" stroke="white" stroke-width="3" fill="none"/>
-                    <rect x="40" y="130" width="20" height="40" rx="5" fill="#0099cc" stroke="white" stroke-width="3"/>
-                    <rect x="140" y="130" width="20" height="40" rx="5" fill="#0099cc" stroke="white" stroke-width="3"/>
-                </svg>
-
-            </div>
-
-            <!-- Правая панель (Инструменты рисования) -->
-            <div class="drawing-tools" id="drawTools" style="display: none;">
-                <div class="color-picker" style="background: #ff0000;" onclick="setColor('#ff0000')"></div>
-                <div class="color-picker" style="background: #00ff00;" onclick="setColor('#00ff00')"></div>
-                <div class="color-picker" style="background: #0000ff;" onclick="setColor('#0000ff')"></div>
-                <div class="color-picker" style="background: #ffff00;" onclick="setColor('#ffff00')"></div>
-                <div class="tool-btn" onclick="clearCanvas()">🗑️</div>
-                <div class="tool-btn" onclick="saveDrawing()">💾</div>
-            </div>
-
-        </div>
-
-        <!-- Нижняя панель -->
-        <div class="bottom-bar">
-            <div class="fighter-info">
-                <div class="fighter-name" id="fighterName">Кибер Бот</div>
-                <div class="fighter-desc">Легендарный боец арены. Умеет рисовать!</div>
-            </div>
-
-            <div class="play-btn-container">
-                <button class="play-btn" onclick="startGame()">
-                    <span>В БОЙ!</span>
-                </button>
-            </div>
-            
-            <!-- Пустой блок для баланса справа -->
-            <div style="width: 100px;"></div>
-        </div>
-
     </div>
-
-    <script>
-        // --- Логика переключения режимов ---
-        let currentMode = 'gallery';
-        const canvas = document.getElementById('drawCanvas');
-        const ctx = canvas.getContext('2d');
-        const defaultFighter = document.getElementById('defaultFighter');
-        const drawTools = document.getElementById('drawTools');
-        const fighterName = document.getElementById('fighterName');
-
-        function setMode(mode) {
-            currentMode = mode;
-            const options = document.querySelectorAll('.mode-option');
-            options.forEach(opt => opt.classList.remove('active'));
+    <!-- Основной контент -->
+    <div class="main-content">
+        <!-- Левое меню -->
+        <div class="left-sidebar">
+            <button class="menu-btn" title="Магазин">🛒</button>
+            <button class="menu-btn" title="Бойцы" onclick="openCreationPanel()">🦸</button>
+            <button class="menu-btn" title="Задания">📜</button>
+            <button class="menu-btn" title="Друзья">👥</button>
+            <button class="menu-btn" title="Настройки">⚙️</button>
+        </div>
+        <!-- Центр (Боец) -->
+        <div class="center-stage">
+            <div class="character-display">
+                <img id="current-character-img" src="" alt="Выберите бойца" class="character-img">
+            </div>
+            <div class="character-name" id="current-character-name">Выберите бойца</div>
             
-            if (mode === 'draw') {
-                options[1].classList.add('active');
-                canvas.style.display = 'block';
-                defaultFighter.classList.remove('visible');
-                drawTools.style.display = 'flex';
-                fighterName.innerText = "Художник";
-                initDraw();
+            <button style="margin-top: 15px; background: rgba(0,0,0,0.5); border: 1px solid white; color: white; padding: 5px 15px; border-radius: 15px; cursor: pointer;" onclick="openCreationPanel()">
+                ✏️ Изменить отряд
+            </button>
+        </div>
+        <!-- Правая панель (Статы) -->
+        <div class="right-sidebar">
+            <h3 style="margin-top: 0; text-align: center; color: #ffd700;">Характеристики</h3>
+            <div class="stat-row">
+                <div class="stat-label">Сила</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 75%"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Скорость</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 60%"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Магия</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 90%"></div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Опыт</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 45%"></div></div>
+            </div>
+            <div style="margin-top: 20px; font-size: 14px; line-height: 1.5; text-align: center;">
+                "Древнее зло пробудилось. Только ты можешь спасти королевство!"
+            </div>
+        </div>
+    </div>
+    <!-- Нижняя панель -->
+    <div class="bottom-bar">
+        <button class="play-btn" onclick="startGame()">В БОЙ!</button>
+    </div>
+    <!-- Панель создания/выбора -->
+    <div class="creation-panel" id="creationPanel">
+        <button class="close-panel" onclick="closeCreationPanel()">×</button>
+        <h2 style="text-align: center; margin-top: 0; color: #ffd700;">Выбор Персонажа</h2>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('existing')">Существующие</button>
+            <button class="tab-btn" onclick="switchTab('ai')">Галерея ИИ</button>
+            <button class="tab-btn" onclick="switchTab('draw')">Нарисовать</button>
+        </div>
+        <!-- Вкладка: Существующие -->
+        <div id="tab-existing" class="tab-content active">
+            <div class="gallery-grid" id="existing-gallery">
+                <!-- Сюда загружаются сохраненные -->
+            </div>
+            <p style="text-align: center; opacity: 0.7; font-size: 14px;">Нажмите на персонажа, чтобы выбрать его.</p>
+        </div>
+        <!-- Вкладка: ИИ -->
+        <div id="tab-ai" class="tab-content">
+            <div style="text-align: center; padding: 20px;">
+                <p>Сгенерируйте уникальное существо с помощью магического кристалла (ИИ).</p>
+                <button class="action-btn" style="background: #9c27b0; width: 100%; padding: 15px; font-size: 18px; margin-top: 20px;" onclick="generateAICharacter()">✨ Создать ИИ бойца</button>
+                <div id="ai-result" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        <!-- Вкладка: Рисование -->
+        <div id="tab-draw" class="tab-content">
+            <div class="canvas-container">
+                <canvas id="drawCanvas" width="400" height="300"></canvas>
+                <div class="tools">
+                    <div class="color-btn active" style="background: black;" onclick="setColor('black', this)"></div>
+                    <div class="color-btn" style="background: red;" onclick="setColor('red', this)"></div>
+                    <div class="color-btn" style="background: blue;" onclick="setColor('blue', this)"></div>
+                    <div class="color-btn" style="background: green;" onclick="setColor('green', this)"></div>
+                    <div class="color-btn" style="background: yellow;" onclick="setColor('yellow', this)"></div>
+                    <div class="color-btn" style="background: white;" onclick="setColor('white', this)"></div>
+                    <input type="range" id="brushSize" min="1" max="20" value="5" style="width: 100px;">
+                    <button class="action-btn clear" onclick="clearCanvas()">Очистить</button>
+                    <button class="action-btn save" onclick="saveDrawing()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // --- Логика данных ---
+        let characters = [];
+        let selectedCharId = null;
+        // Загрузка из localStorage при старте
+        function loadCharacters() {
+            const saved = localStorage.getItem('characters');
+            if (saved) {
+                characters = JSON.parse(saved);
             } else {
-                options[0].classList.add('active');
-                canvas.style.display = 'none';
-                defaultFighter.classList.add('visible');
-                drawTools.style.display = 'none';
-                fighterName.innerText = "Кибер Бот";
+                // Дефолтные персонажи если пусто
+                characters = [
+                    { id: 1, name: "Дракон", src: "https://cdn-icons-png.flaticon.com/512/3069/3069172.png" },
+                    { id: 2, name: "Рыцарь", src: "https://cdn-icons-png.flaticon.com/512/3408/3408506.png" },
+                    { id: 3, name: "Маг", src: "https://cdn-icons-png.flaticon.com/512/3069/3069162.png" }
+                ];
+                saveToStorage();
+            }
+            renderGallery();
+            
+            // Выбираем первого по умолчанию если ничего не выбрано
+            if (!selectedCharId && characters.length > 0) {
+                selectCharacter(characters[0].id);
             }
         }
-
-        // --- Логика Рисования ---
+        function saveToStorage() {
+            localStorage.setItem('characters', JSON.stringify(characters));
+            renderGallery();
+        }
+        // --- Рендер галереи ---
+        function renderGallery() {
+            const container = document.getElementById('existing-gallery');
+            container.innerHTML = '';
+            
+            characters.forEach(char => {
+                const div = document.createElement('div');
+                div.className = `gallery-item ${char.id === selectedCharId ? 'selected' : ''}`;
+                div.onclick = () => selectCharacter(char.id);
+                
+                div.innerHTML = `
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteCharacter(${char.id})">✖</button>
+                    <img src="${char.src}" alt="${char.name}">
+                    <p>${char.name}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+        function selectCharacter(id) {
+            selectedCharId = id;
+            const char = characters.find(c => c.id === id);
+            if (char) {
+                document.getElementById('current-character-img').src = char.src;
+                document.getElementById('current-character-name').textContent = char.name;
+                renderGallery(); // Обновить выделение
+            }
+        }
+        function deleteCharacter(id) {
+            if (confirm('Удалить этого бойца?')) {
+                characters = characters.filter(c => c.id !== id);
+                saveToStorage();
+                if (selectedCharId === id) {
+                    selectedCharId = null;
+                    document.getElementById('current-character-img').src = "";
+                    document.getElementById('current-character-name').textContent = "Выберите бойца";
+                }
+            }
+        }
+        // --- Управление вкладками ---
+        function openCreationPanel() {
+            document.getElementById('creationPanel').classList.add('active');
+            loadCharacters(); // Обновить список
+        }
+        function closeCreationPanel() {
+            document.getElementById('creationPanel').classList.remove('active');
+        }
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+        // --- Рисование ---
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
         let painting = false;
-        let currentColor = '#ff0000';
-
+        let currentColor = 'black';
         function startPosition(e) {
             painting = true;
             draw(e);
         }
-
-        function finishedPosition() {
+        function endPosition() {
             painting = false;
             ctx.beginPath();
         }
-
         function draw(e) {
             if (!painting) return;
-            
-            // Получаем координаты относительно канваса
             const rect = canvas.getBoundingClientRect();
             const x = (e.clientX || e.touches[0].clientX) - rect.left;
             const y = (e.clientY || e.touches[0].clientY) - rect.top;
-
-            ctx.lineWidth = 5;
+            
+            ctx.lineWidth = document.getElementById('brushSize').value;
             ctx.lineCap = 'round';
             ctx.strokeStyle = currentColor;
-
             ctx.lineTo(x, y);
             ctx.stroke();
             ctx.beginPath();
             ctx.moveTo(x, y);
         }
-
-        function setColor(color) {
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', startPosition);
+        canvas.addEventListener('touchend', endPosition);
+        canvas.addEventListener('touchmove', draw);
+        function setColor(color, btn) {
             currentColor = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
-
         function clearCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-
         function saveDrawing() {
-            alert("Рисунок сохранен (в памяти браузера)!");
-            // Здесь можно добавить логику сохранения картинки
+            const dataURL = canvas.toDataURL();
+            const name = prompt("Назовите вашего героя:", "Мой Герой");
+            if (name) {
+                const newChar = {
+                    id: Date.now(),
+                    name: name,
+                    src: dataURL
+                };
+                characters.push(newChar);
+                saveToStorage();
+                selectCharacter(newChar.id);
+                alert("Герой сохранен в отряд!");
+                switchTab('existing');
+                document.querySelector('.tab-btn').click(); // Переключить на первую вкладку визуально
+            }
         }
-
-        function initDraw() {
-            // Мышь
-            canvas.addEventListener('mousedown', startPosition);
-            canvas.addEventListener('mouseup', finishedPosition);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseleave', finishedPosition);
+        // --- ИИ Генерация (Имитация) ---
+        function generateAICharacter() {
+            const btn = document.querySelector('#tab-ai .action-btn');
+            const resultDiv = document.getElementById('ai-result');
             
-            // Тачскрин (для телефонов)
-            canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault(); // Чтобы не скроллило
-                startPosition(e);
-            });
-            canvas.addEventListener('touchend', finishedPosition);
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                draw(e);
-            });
-        }
-
-        // --- Интерактив кнопки ---
-        function startGame() {
-            const btn = document.querySelector('.play-btn');
-            btn.innerHTML = "<span>ПОИСК...</span>";
-            btn.style.background = "linear-gradient(180deg, #00ff00, #00cc00)";
-            
+            btn.disabled = true;
+            btn.textContent = "🔮 Магия создает существо...";
+            resultDiv.innerHTML = "";
             setTimeout(() => {
-                alert("Бой начинается! (Здесь будет переход на экран боя)");
-                btn.innerHTML = "<span>В БОЙ!</span>";
-                btn.style.background = "linear-gradient(180deg, #ffd700, #ffaa00)";
+                // Генерируем случайный цвет и форму через SVG данные
+                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                const shapes = ['circle', 'square', 'triangle'];
+                const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                // Создаем простой SVG как изображение
+                let svgContent = '';
+                if(randomShape === 'circle') {
+                    svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><circle cx='100' cy='100' r='80' fill='${randomColor}' stroke='white' stroke-width='5'/><circle cx='70' cy='80' r='10' fill='white'/><circle cx='130' cy='80' r='10' fill='white'/><path d='M 60 140 Q 100 180 140 140' stroke='white' stroke-width='5' fill='none'/></svg>`;
+                } else if (randomShape === 'square') {
+                    svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><rect x='20' y='20' width='160' height='160' fill='${randomColor}' stroke='white' stroke-width='5'/><circle cx='70' cy='80' r='10' fill='white'/><circle cx='130' cy='80' r='10' fill='white'/><rect x='60' y='140' width='80' height='20' fill='white'/></svg>`;
+                } else {
+                    svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><polygon points='100,20 20,180 180,180' fill='${randomColor}' stroke='white' stroke-width='5'/><circle cx='80' cy='100' r='10' fill='white'/><circle cx='120' cy='100' r='10' fill='white'/><path d='M 70 140 Q 100 160 130 140' stroke='white' stroke-width='5' fill='none'/></svg>`;
+                }
+                const svgUrl = 'data:image/svg+xml;base64,' + btoa(svgContent);
+                const name = "ИИ Существо #" + Math.floor(Math.random() * 1000);
+                const newChar = {
+                    id: Date.now(),
+                    name: name,
+                    src: svgUrl
+                };
+                
+                characters.push(newChar);
+                saveToStorage();
+                selectCharacter(newChar.id);
+                resultDiv.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
+                        <img src="${svgUrl}" style="width: 100px; display:block; margin: 0 auto;">
+                        <p style="text-align:center; color: #ffd700;">${name}</p>
+                        <p style="text-align:center; font-size: 12px;">Добавлено в отряд!</p>
+                    </div>
+                `;
+                
+                btn.disabled = false;
+                btn.textContent = "✨ Создать еще одного";
             }, 1500);
         }
-
-        // Инициализация при загрузке
-        setMode('gallery');
-
+        // --- Старт игры ---
+        function startGame() {
+            if (!selectedCharId) {
+                alert("Сначала выберите бойца!");
+                openCreationPanel();
+                return;
+            }
+            const char = characters.find(c => c.id === selectedCharId);
+            alert(`⚔️ ${char.name} отправляется в подземелье! \n(Здесь начнется игра)`);
+        }
+        // Инициализация
+        window.onload = loadCharacters;
     </script>
 </body>
-</html>
+</html>` did not appear verbatim in /workspace/index.html.
