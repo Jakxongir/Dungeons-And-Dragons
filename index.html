@@ -3,622 +3,657 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brawl Stars Style Menu</title>
+    <title>Dungeons-And-Dragons</title>
     <style>
-        * {
+        :root {
+            --primary: #ffd700;
+            --danger: #ff4444;
+            --success: #00c851;
+            --info: #33b5e5;
+            --dark: #1a0b2e;
+            --panel: rgba(20, 10, 40, 0.9);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        /* Твой переливающийся фон */
-        .animated-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(
-                -45deg, 
-                #ff9a3c,
-                #ff5e62,
-                #ff7eb9,
-                #c471ed,
-                #a259ff,
-                #ff9a3c
-            );
+            color: white;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #ff9a3c, #ff5e62, #ff7eb9, #c471ed, #a259ff, #ff9a3c);
             background-size: 400% 400%;
-            animation: gradientShift 10s ease infinite;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
         }
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        .animated-background::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(
-                circle at 50% 50%,
-                rgba(255, 255, 255, 0.1),
-                transparent 60%
-            );
-            animation: pulseOverlay 5s ease-in-out infinite alternate;
-            pointer-events: none;
+
+        /* UI Components */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
         }
-        @keyframes pulseOverlay {
-            0% { opacity: 0.3; transform: scale(1); }
-            100% { opacity: 0.6; transform: scale(1.1); }
-        }
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: white;
-            overflow-x: hidden;
-        }
-        /* Верхняя панель с ресурсами */
-        .top-bar {
+
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .currency-container {
-            display: flex;
-            gap: 20px;
-        }
-        .currency-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        .currency-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-        .gems .currency-icon { background: #e74c3c; }
-        .coins .currency-icon { background: #f1c40f; }
-        .tokens .currency-icon { background: #3498db; }
-        .add-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .add-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        /* Основной контент */
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-        /* Левое меню */
-        .left-sidebar {
-            width: 80px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-        .menu-btn {
-            width: 60px;
-            height: 60px;
+            background: var(--panel);
+            padding: 15px;
             border-radius: 15px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .resources {
+            display: flex;
+            gap: 15px;
+        }
+
+        .res-item {
+            background: rgba(0,0,0,0.5);
+            padding: 5px 12px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
+            gap: 5px;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-tabs {
+            display: flex;
             justify-content: center;
-            font-size: 24px;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--panel);
+            border: 2px solid var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
         }
-        .menu-btn:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--primary);
         }
-        /* Центральная часть */
-        .center-stage {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+
+        .content-area {
+            background: var(--panel);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 400px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Fighters Grid */
+        .fighters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
-        .character-display {
-            width: 300px;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        .fighter-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
-        .character-img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+
+        .fighter-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
         }
-        .character-info {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 25px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 400px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+
+        .fighter-card.selected {
+            border: 2px solid var(--success);
+            box-shadow: 0 0 20px rgba(0, 200, 81, 0.3);
         }
-        .character-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        .character-level {
-            font-size: 16px;
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
-        /* Вкладки галереи */
-        .gallery-tabs {
+
+        .card-header {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
-        .tab-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
+
+        .class-badge {
+            background: var(--info);
             color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
         }
-        .tab-btn.active {
-            background: #ffd700;
-            color: #333;
-            border-color: #ffd700;
-            transform: scale(1.05);
-        }
-        .gallery-container {
-            width: 100%;
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .gallery-grid {
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px;
-            max-height: 400px;
-            overflow-y: auto;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.3);
+            padding: 3px 5px;
+            border-radius: 4px;
+        }
+
+        .action-btn {
+            width: 100%;
             padding: 10px;
-        }
-        .gallery-item {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .gallery-item.selected {
-            border-color: #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-        .gallery-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
-        }
-        .gallery-item-name {
-            font-size: 12px;
+            border: none;
+            border-radius: 8px;
             font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+            text-transform: uppercase;
         }
-        .ai-section, .draw-section {
+
+        .btn-select { background: var(--primary); color: var(--dark); }
+        .btn-battle { 
+            background: var(--danger); 
+            color: white; 
+            font-size: 1.2rem; 
+            padding: 15px; 
+            margin-top: 20px;
+            box-shadow: 0 4px 0 #b30000;
+        }
+        .btn-battle:active { transform: translateY(4px); box-shadow: none; }
+        .btn-battle:disabled { background: #555; box-shadow: none; cursor: not-allowed; }
+
+        /* Shop & Quests */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .quest-reward { color: var(--primary); font-weight: bold; }
+        
+        /* Battle Screen */
+        #battle-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 100;
             display: none;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
-            width: 100%;
+            justify-content: center;
         }
-        .ai-section.active, .draw-section.active {
+
+        .battle-arena {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .combatants {
             display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
         }
-        .generate-btn {
-            padding: 15px 40px;
-            background: linear-gradient(45deg, #9b59b6, #8e44ad);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+
+        .combatant {
+            width: 150px;
+            text-align: center;
         }
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.6);
+
+        .health-bar-container {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+            border: 2px solid white;
         }
-        .canvas-container {
-            background: white;
-            border-radius: 15px;
+
+        .health-bar {
+            height: 100%;
+            background: var(--success);
+            width: 100%;
+            transition: width 0.5s ease-out;
+        }
+
+        .battle-log {
+            height: 150px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #444;
             padding: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            text-align: left;
+            font-family: monospace;
+            border-radius: 5px;
         }
-        #drawingCanvas {
-            border: 2px solid #333;
+
+        .log-entry { margin-bottom: 5px; }
+        .log-player { color: #4fc3f7; }
+        .log-enemy { color: #ff8a80; }
+        .log-sys { color: #ffd700; }
+
+        /* Drawing Canvas */
+        .canvas-container {
+            text-align: center;
+        }
+        canvas {
+            background: white;
             border-radius: 10px;
             cursor: crosshair;
-            background: white;
+            touch-action: none;
         }
         .color-picker {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
             justify-content: center;
-        }
-        .color-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid white;
-            cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-        .color-btn:hover {
-            transform: scale(1.1);
-        }
-        .color-btn.active {
-            border-color: #333;
-            transform: scale(1.15);
-        }
-        .brush-size {
-            display: flex;
-            align-items: center;
             gap: 10px;
             margin: 10px 0;
         }
-        .brush-size input {
-            width: 150px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .action-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 20px;
-            font-weight: bold;
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
         }
-        .save-btn {
-            background: #2ecc71;
+        .color-btn.active { transform: scale(1.2); border-color: var(--primary); }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
             color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateX(200%);
+            transition: transform 0.3s;
+            z-index: 1000;
         }
-        .clear-btn {
-            background: #e74c3c;
-            color: white;
-        }
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        /* Нижняя панель с кнопкой ИГРАТЬ */
-        .bottom-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        .play-btn {
-            padding: 20px 80px;
-            background: linear-gradient(45deg, #ffd700, #f1c40f);
-            border: none;
-            border-radius: 30px;
-            color: #333;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transform: skew(-10deg);
-        }
-        .play-btn:hover {
-            transform: skew(-10deg) translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.7);
-        }
-        .play-btn:active {
-            transform: skew(-10deg) translateY(-2px) scale(0.98);
-        }
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-                padding: 10px;
-            }
-            .left-sidebar {
-                flex-direction: row;
-                width: 100%;
-                justify-content: center;
-                order: 3;
-            }
-            .center-stage {
-                order: 1;
-            }
-            .gallery-container {
-                order: 2;
-            }
-            .top-bar {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .currency-container {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .character-display {
-                width: 250px;
-                height: 250px;
-            }
-            .play-btn {
-                padding: 15px 50px;
-                font-size: 24px;
-            }
-        }
-        .loading {
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            color: #ffd700;
-        }
+        .notification.show { transform: translateX(0); }
     </style>
 </head>
 <body>
-    <!-- Фон -->
-    <div class="animated-background"></div>
-    <!-- Верхняя панель -->
-    <div class="top-bar">
-        <div class="logo">
-            <h1 style="font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Dungeons-And-Dragons</h1>
+
+<div class="notification" id="notification">Сообщение</div>
+
+<!-- Battle Overlay -->
+<div id="battle-screen">
+    <div class="battle-arena">
+        <h2 style="color: var(--danger); text-transform: uppercase; letter-spacing: 3px;">Битва!</h2>
+        
+        <div class="combatants">
+            <div class="combatant" id="player-combatant">
+                <div id="battle-player-name" style="font-weight:bold; margin-bottom:5px;">Игрок</div>
+                <div class="health-bar-container">
+                    <div class="health-bar" id="player-hp-bar"></div>
+                </div>
+                <div id="player-hp-text">100/100</div>
+                <div style="font-size: 3rem; margin: 10px 0;">🦸</div>
+            </div>
+            
+            <div style="font-size: 2rem; font-weight: bold;">VS</div>
+            
+            <div class="combatant" id="enemy-combatant">
+                <div id="battle-enemy-name" style="font-weight:bold; margin-bottom:5px; color: #ff8a80;">Монстр</div>
+                <div class="health-bar-container">
+                    <div class="health-bar" id="enemy-hp-bar" style="background: var(--danger);"></div>
+                </div>
+                <div id="enemy-hp-text">100/100</div>
+                <div style="font-size: 3rem; margin: 10px 0;">👹</div>
+            </div>
         </div>
-        <div class="currency-container">
-            <div class="currency-item gems">
-                <div class="currency-icon">💎</div>
-                <span id="gems-count">150</span>
-                <button class="add-btn">+</button>
-            </div>
-            <div class="currency-item coins">
-                <div class="currency-icon">🪙</div>
-                <span id="coins-count">2500</span>
-                <button class="add-btn">+</button>
-            </div>
-            <div class="currency-item tokens">
-                <div class="currency-icon">🎫</div>
-                <span id="tokens-count">75</span>
-                <button class="add-btn">+</button>
-            </div>
+
+        <div class="battle-log" id="battle-log"></div>
+
+        <div id="battle-controls">
+            <button class="action-btn btn-battle" style="width: 200px;" onclick="battleAttack()">⚔️ АТАКА</button>
+            <button class="action-btn" style="background: #444; color: white; width: 200px; margin-top: 10px;" onclick="endBattle(true)">🏳️ Сдаться</button>
+        </div>
+        <div id="battle-end-controls" style="display:none;">
+            <button class="action-btn btn-battle" style="width: 200px;" onclick="endBattle(false)">🏠 В меню</button>
         </div>
     </div>
-    <!-- Основной контент -->
-    <div class="main-content">
-        <!-- Левое меню -->
-        <div class="left-sidebar">
-            <div class="menu-btn" title="Магазин">🛒</div>
-            <div class="menu-btn" title="Бойцы">🦸</div>
-            <div class="menu-btn" title="События">📅</div>
-            <div class="menu-btn" title="Клуб">🏆</div>
-            <div class="menu-btn" title="Друзья">👥</div>
+</div>
+
+<div class="app-container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">Dungeons-And-Dragons</div>
+        <div class="resources">
+            <div class="res-item">💰 <span id="gold-display">0</span></div>
+            <div class="res-item">💎 <span id="gems-display">0</span></div>
+            <div class="res-item">🏆 <span id="rating-display">0</span></div>
         </div>
-        <!-- Центральная часть -->
-        <div class="center-stage">
-            <!-- Отображение персонажа -->
-            <div class="character-display">
-                <img id="current-character" class="character-img" src="" alt="Персонаж">
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('heroes')">Герои</button>
+        <button class="tab-btn" onclick="switchTab('create')">Создать (ИИ/Рис)</button>
+        <button class="tab-btn" onclick="switchTab('shop')">Магазин</button>
+        <button class="tab-btn" onclick="switchTab('quests')">Задания</button>
+    </div>
+
+    <!-- Content -->
+    <div class="content-area">
+        
+        <!-- Heroes Tab -->
+        <div id="heroes" class="tab-content active">
+            <h3>Ваши Герои</h3>
+            <p style="color: #aaa; font-size: 0.9rem;">Выберите героя для входа в бой</p>
+            <div class="fighters-grid" id="heroes-list"></div>
+            <button id="start-battle-btn" class="action-btn btn-battle" disabled onclick="startGame()">⚔️ В БОЙ!</button>
+        </div>
+
+        <!-- Create Tab -->
+        <div id="create" class="tab-content">
+            <div class="nav-tabs" style="margin-bottom: 10px;">
+                <button class="tab-btn active" onclick="setCreateMode('ai')">🤖 ИИ Генератор</button>
+                <button class="tab-btn" onclick="setCreateMode('draw')">🎨 Рисование</button>
             </div>
-            <!-- Информация о персонаже -->
-            <div class="character-info">
-                <div class="character-name" id="char-name">Выберите бойца</div>
-                <div class="character-level" id="char-level">Уровень 1</div>
-            </div>
-            <!-- Вкладки галереи -->
-            <div class="gallery-tabs">
-                <button class="tab-btn active" data-tab="existing">Существующие</button>
-                <button class="tab-btn" data-tab="ai">Галерея ИИ</button>
-                <button class="tab-btn" data-tab="draw">Нарисовать</button>
-            </div>
-            <!-- Контейнер галереи -->
-            <div class="gallery-container">
-                <!-- Существующие бойцы -->
-                <div id="existing-gallery" class="gallery-grid">
-                    <!-- Загружается через JS -->
+
+            <!-- AI Mode -->
+            <div id="ai-mode">
+                <div style="text-align: center; padding: 20px;">
+                    <p>ИИ создаст уникального героя со сбалансированными характеристиками.</p>
+                    <button class="action-btn btn-select" style="width: 200px;" onclick="generateAIHero()">✨ Создать Героя</button>
                 </div>
-                <!-- Галерея ИИ -->
-                <div id="ai-gallery" class="ai-section">
-                    <button class="generate-btn" id="generate-ai-btn">✨ Создать ИИ бойца</button>
-                    <div id="ai-result" style="margin-top: 20px; text-align: center;"></div>
-                </div>
-                <!-- Рисование -->
-                <div id="draw-gallery" class="draw-section">
-                    <div class="canvas-container">
-                        <canvas id="drawingCanvas" width="300" height="300"></canvas>
-                    </div>
-                    
+            </div>
+
+            <!-- Draw Mode -->
+            <div id="draw-mode" style="display: none;">
+                <div class="canvas-container">
+                    <canvas id="drawCanvas" width="300" height="300"></canvas>
                     <div class="color-picker">
-                        <div class="color-btn active" style="background: #000000;" data-color="#000000"></div>
-                        <div class="color-btn" style="background: #ffffff;" data-color="#ffffff"></div>
-                        <div class="color-btn" style="background: #e74c3c;" data-color="#e74c3c"></div>
-                        <div class="color-btn" style="background: #3498db;" data-color="#3498db"></div>
-                        <div class="color-btn" style="background: #2ecc71;" data-color="#2ecc71"></div>
-                        <div class="color-btn" style="background: #f1c40f;" data-color="#f1c40f"></div>
+                        <div class="color-btn active" style="background: black;" onclick="setColor('black')"></div>
+                        <div class="color-btn" style="background: red;" onclick="setColor('red')"></div>
+                        <div class="color-btn" style="background: blue;" onclick="setColor('blue')"></div>
+                        <div class="color-btn" style="background: green;" onclick="setColor('green')"></div>
+                        <div class="color-btn" style="background: yellow;" onclick="setColor('yellow')"></div>
+                        <div class="color-btn" style="background: white;" onclick="setColor('white')"></div>
                     </div>
-                    
-                    <div class="brush-size">
-                        <label>Размер кисти:</label>
-                        <input type="range" id="brushSize" min="1" max="20" value="5">
-                        <span id="brushSizeValue">5</span>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="action-btn save-btn" id="save-drawing-btn">💾 Сохранить</button>
-                        <button class="action-btn clear-btn" id="clear-canvas-btn">🗑️ Очистить</button>
-                    </div>
+                    <button class="action-btn" style="width: 150px; background: #444; color: white;" onclick="clearCanvas()">Очистить</button>
+                    <button class="action-btn btn-select" style="width: 150px;" onclick="saveDrawing()">💾 Сохранить</button>
                 </div>
             </div>
         </div>
+
+        <!-- Shop Tab -->
+        <div id="shop" class="tab-content">
+            <h3>Магазин Улучшений</h3>
+            <div id="shop-list">
+                <!-- Items injected by JS -->
+            </div>
+        </div>
+
+        <!-- Quests Tab -->
+        <div id="quests" class="tab-content">
+            <h3>Ежедневные Задания</h3>
+            <div id="quests-list">
+                <!-- Quests injected by JS -->
+            </div>
+        </div>
     </div>
-    <!-- Нижняя панель -->
-    <div class="bottom-bar">
-        <button class="play-btn" id="play-btn">В БОЙ!</button>
-    </div>
-    <script>
-        // Данные по умолчанию (если нет сохраненных)
-        const defaultCharacters = [
-            {
-                id: 'shelly_001',
-                name: 'Шелли',
-                level: 1,
-                image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iI2U3NGMzYyIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI1IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTSAzMCA2MCBMIDUwIDgwIEwgNzAgNjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PC9zdmc+'
-            },
-            {
-                id: 'colt_001',
-                name: 'Кольт',
-                level: 1,
-                image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzM0OThkYiIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI1IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTSAzNSA2NSBMIDY1IDY1IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIvPjwvc3ZnPg=='
-            },
-            {
-                id: 'bull_001',
-                name: 'Бык',
-                level: 1,
-                image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzJjYzJjYyIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI1IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTSAyNSA1NSBMIDM1IDY1IEwgNDUgNTUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTSA1NSA1NSBMIDY1IDY1IEwgNzUgNTUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PC9zdmc+'
-            }
-        ];
-        // Состояние приложения
-        let characters = [];
-        let selectedCharacterId = null;
-        let currentTab = 'existing';
-        // Элементы Canvas
-        let canvas, ctx;
-        let isDrawing = false;
-        let currentColor = '#000000';
-        let brushSize = 5;
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', () => {
-            initCanvas();
-            loadCharacters();
-            setupEventListeners();
-            updateUI();
+</div>
+
+<script>
+    // --- State Management ---
+    const defaultState = {
+        gold: 0,
+        gems: 0,
+        rating: 0,
+        heroes: [],
+        quests: [
+            { id: 1, text: "Провести 1 битву", reward: 50, completed: false, claimed: false },
+            { id: 2, text: "Создать 1 героя", reward: 30, completed: false, claimed: false },
+            { id: 3, text: "Накопить 100 золота", reward: 100, completed: false, claimed: false }
+        ],
+        shopItems: [
+            { id: 1, name: "Зелье Силы (+5)", cost: 50, type: 'str', val: 5 },
+            { id: 2, name: "Свиток Скорости (+5)", cost: 50, type: 'spd', val: 5 },
+            { id: 3, name: "Кристалл Магии (+5)", cost: 50, type: 'mag', val: 5 }
+        ]
+    };
+
+    let state = JSON.parse(localStorage.getItem('dad_game_state')) || JSON.parse(JSON.stringify(defaultState));
+    
+    // Ensure new fields exist if loading old save
+    if (!state.gold) state.gold = 0;
+    if (!state.gems) state.gems = 0;
+    if (!state.rating) state.rating = 0;
+    if (!state.shopItems) state.shopItems = defaultState.shopItems;
+    
+    let selectedHeroId = null;
+    let currentBattle = null;
+
+    // --- Initialization ---
+    function init() {
+        updateUI();
+        renderHeroes();
+        renderShop();
+        renderQuests();
+        setupCanvas();
+    }
+
+    function saveState() {
+        localStorage.setItem('dad_game_state', JSON.stringify(state));
+        updateUI();
+    }
+
+    function showNotification(msg) {
+        const el = document.getElementById('notification');
+        el.textContent = msg;
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    function updateUI() {
+        document.getElementById('gold-display').textContent = state.gold;
+        document.getElementById('gems-display').textContent = state.gems;
+        document.getElementById('rating-display').textContent = state.rating;
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+        
+        if (tabId === 'heroes') renderHeroes();
+        if (tabId === 'shop') renderShop();
+        if (tabId === 'quests') renderQuests();
+    }
+
+    // --- Hero Logic ---
+    const CLASSES = [
+        { name: 'Танк', base: { str: 80, spd: 40, mag: 30, exp: 50 } },
+        { name: 'Воин', base: { str: 70, spd: 60, mag: 40, exp: 60 } },
+        { name: 'Маг', base: { str: 30, spd: 50, mag: 90, exp: 70 } },
+        { name: 'Убийца', base: { str: 60, spd: 90, mag: 40, exp: 50 } },
+        { name: 'Лучник', base: { str: 50, spd: 80, mag: 60, exp: 60 } },
+        { name: 'Жрец', base: { str: 40, spd: 50, mag: 80, exp: 80 } }
+    ];
+
+    const NAMES_PREFIX = ['Темный', 'Светлый', 'Дикий', 'Древний', 'Храбрый', 'Таинственный'];
+    const NAMES_ROOT = ['Воин', 'Странник', 'Хранитель', 'Охотник', 'Маг', 'Рыцарь'];
+
+    function generateName() {
+        return `${NAMES_PREFIX[Math.floor(Math.random()*NAMES_PREFIX.length)]} ${NAMES_ROOT[Math.floor(Math.random()*NAMES_ROOT.length)]}`;
+    }
+
+    function createHero(source, customData = null) {
+        const cls = CLASSES[Math.floor(Math.random() * CLASSES.length)];
+        let stats = { ...cls.base };
+        let name = generateName();
+        let isCustom = false;
+
+        // AI Balancing Logic
+        if (source === 'ai') {
+            // Add some randomness but keep class identity
+            Object.keys(stats).forEach(k => {
+                stats[k] = Math.min(100, Math.max(10, stats[k] + Math.floor(Math.random() * 20) - 10));
+            });
+        } 
+        else if (source === 'draw') {
+            isCustom = true;
+            name = customData.name || "Нарисованный Герой";
+            // Debuff logic for custom drawn heroes to prevent OP stats
+            // Base stats are lower, cap is lower
+            stats = { str: 50, spd: 50, mag: 50, exp: 50 };
+            const randClass = CLASSES[Math.floor(Math.random() * CLASSES.length)];
+            // Apply slight class bias but keep total power lower than AI
+            stats.str = Math.floor(randClass.base.str * 0.7);
+            stats.spd = Math.floor(randClass.base.spd * 0.7);
+            stats.mag = Math.floor(randClass.base.mag * 0.7);
+            stats.exp = Math.floor(randClass.base.exp * 0.7);
+            
+            // Random Debuff: One stat is significantly reduced
+            const debuffStat = Object.keys(stats)[Math.floor(Math.random()*4)];
+            stats[debuffStat] = Math.floor(stats[debuffStat] * 0.5);
+        }
+
+        const hero = {
+            id: Date.now(),
+            name: name,
+            class: cls.name,
+            stats: stats,
+            image: customData ? customData.image : null,
+            source: source
+        };
+
+        state.heroes.push(hero);
+        saveState();
+        renderHeroes();
+        showNotification(`Герой ${hero.name} создан!`);
+        
+        // Complete quest if needed
+        checkQuestProgress('create_hero');
+    }
+
+    function generateAIHero() {
+        createHero('ai');
+    }
+
+    function renderHeroes() {
+        const container = document.getElementById('heroes-list');
+        container.innerHTML = '';
+        
+        if (state.heroes.length === 0) {
+            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">У вас нет героев. Создайте первого!</p>';
+            document.getElementById('start-battle-btn').disabled = true;
+            return;
+        }
+
+        state.heroes.forEach(hero => {
+            const card = document.createElement('div');
+            card.className = `fighter-card ${selectedHeroId === hero.id ? 'selected' : ''}`;
+            card.onclick = () => selectHero(hero.id);
+            
+            let imgHTML = hero.image 
+                ? `<img src="${hero.image}" style="width:100%; height:150px; object-fit:cover; border-radius:10px; margin-bottom:10px;">`
+                : `<div style="height:150px; background:rgba(0,0,0,0.3); border-radius:10px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-size:3rem;">🛡️</div>`;
+
+            card.innerHTML = `
+                ${imgHTML}
+                <div class="card-header">
+                    <strong>${hero.name}</strong>
+                    <span class="class-badge">${hero.class}</span>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-row"><span>⚔️ Сила</span><span>${hero.stats.str}</span></div>
+                    <div class="stat-row"><span>⚡ Скор</span><span>${hero.stats.spd}</span></div>
+                    <div class="stat-row"><span>🔮 Магия</span><span>${hero.stats.mag}</span></div>
+                    <div class="stat-row"><span>⭐ Опыт</span><span>${hero.stats.exp}</span></div>
+                </div>
+                ${selectedHeroId === hero.id ? '<button class="action-btn" style="background:var(--success); color:white;">Выбран</button>' : '<button class="action-btn btn-select">Выбрать</button>'}
+            `;
+            container.appendChild(card);
         });
-        function initCanvas() {
-            canvas = document.getElementById('drawingCanvas');
-            ctx = canvas.getContext('2d');
-            
-            // Белый фон
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Обработчики событий рисования
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
-            
-            // Для мобильных
-            canvas.addEventListener('touchstart', handleTouchStart);
-            canvas.addEventListener('touchmove', handleTouchMove);
-            canvas.addEventListener('touchend', stopDrawing);
-        }
-        function startDrawing(e) {
-            isDrawing = true;
-            draw(e);
-        }
-        function draw(e) {
-            if (!isDrawing) return;
-            
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            ctx.beginPath();
-            ctx.moveTo(lastX || x, lastY || y);
-            ctx.lineTo(x, y);
-            ctx.strokeStyle = currentColor;
-            ctx.lineWidth = brushSize;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-            
-            lastX = x;
-            lastY = y;
-        }
-        function stopDrawing() {
-            isDrawing = false;
-            lastX = null;
-            lastY = null;
-        }
-        function handleTouchStart(e) {
+
+        document.getElementById('start-battle-btn').disabled = !selectedHeroId;
+    }
+
+    function selectHero(id) {
+        selectedHeroId = id;
+        renderHeroes();
+    }
+
+    // --- Drawing Logic ---
+    let canvas, ctx, isDrawing = false;
+    let drawColor = 'black';
+
+    function setCreateMode(mode) {
+        document.getElementById('ai-mode').style.display = mode === 'ai' ? 'block' : 'none';
+        document.getElementById('draw-mode').style.display = mode === 'draw' ? 'block' : 'none';
+        
+        const btns = document.querySelectorAll('#create .tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function setupCanvas() {
+        canvas = document.getElementById('drawCanvas');
+        ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+
+        // Mouse events
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseout', stopDraw);
+        
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
             const mouseEvent = new MouseEvent('mousedown', {
@@ -626,8 +661,8 @@
                 clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
-        }
-        function handleTouchMove(e) {
+        });
+        canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
             const touch = e.touches[0];
             const mouseEvent = new MouseEvent('mousemove', {
@@ -635,189 +670,270 @@
                 clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
-        }
-        function loadCharacters() {
-            const saved = localStorage.getItem('brawl_characters');
-            if (saved) {
-                characters = JSON.parse(saved);
-            } else {
-                characters = [...defaultCharacters];
-                saveCharacters();
-            }
-        }
-        function saveCharacters() {
-            localStorage.setItem('brawl_characters', JSON.stringify(characters));
-        }
-        function setupEventListeners() {
-            // Переключение вкладок
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentTab = btn.dataset.tab;
-                    updateGalleryView();
-                });
-            });
-            // Генерация ИИ
-            document.getElementById('generate-ai-btn').addEventListener('click', generateAICharacter);
-            // Выбор цвета
-            document.querySelectorAll('.color-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentColor = btn.dataset.color;
-                });
-            });
-            // Размер кисти
-            document.getElementById('brushSize').addEventListener('input', (e) => {
-                brushSize = e.target.value;
-                document.getElementById('brushSizeValue').textContent = brushSize;
-            });
-            // Очистка холста
-            document.getElementById('clear-canvas-btn').addEventListener('click', clearCanvas);
-            // Сохранение рисунка
-            document.getElementById('save-drawing-btn').addEventListener('click', saveDrawing);
-            // Кнопка игры
-            document.getElementById('play-btn').addEventListener('click', () => {
-                if (selectedCharacterId) {
-                    alert(`⚔️ В бой отправляется: ${getSelectedCharacter().name}!`);
-                } else {
-                    alert('⚠️ Сначала выберите бойца!');
-                }
-            });
-        }
-        function updateGalleryView() {
-            document.getElementById('existing-gallery').style.display = currentTab === 'existing' ? 'grid' : 'none';
-            document.getElementById('ai-gallery').style.display = currentTab === 'ai' ? 'flex' : 'none';
-            document.getElementById('draw-gallery').style.display = currentTab === 'draw' ? 'flex' : 'none';
-            
-            if (currentTab === 'existing') {
-                renderExistingGallery();
-            }
-        }
-        function renderExistingGallery() {
-            const container = document.getElementById('existing-gallery');
-            container.innerHTML = '';
-            
-            characters.forEach(char => {
-                const item = document.createElement('div');
-                item.className = `gallery-item ${char.id === selectedCharacterId ? 'selected' : ''}`;
-                item.innerHTML = `
-                    <img src="${char.image}" alt="${char.name}">
-                    <div class="gallery-item-name">${char.name}</div>
-                `;
-                item.addEventListener('click', () => selectCharacter(char.id));
-                container.appendChild(item);
-            });
-        }
-        function generateAICharacter() {
-            const btn = document.getElementById('generate-ai-btn');
-            const resultDiv = document.getElementById('ai-result');
-            
-            btn.disabled = true;
-            btn.textContent = '⏳ Создание...';
-            resultDiv.innerHTML = '<div class="loading">ИИ создает уникального бойца...</div>';
-            
-            // Имитация задержки генерации
-            setTimeout(() => {
-                const names = ['Тень', 'Феникс', 'Гром', 'Сторм', 'Блейд', 'Випер', 'Фрост', 'Вулкан'];
-                const randomName = names[Math.floor(Math.random() * names.length)] + ' ' + Math.floor(Math.random() * 100);
-                
-                // Генерация случайного цвета
-                const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#e67e22'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Создание простого SVG изображения
-                const svgContent = `
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" fill="${randomColor}"/>
-                        <circle cx="35" cy="40" r="5" fill="#fff"/>
-                        <circle cx="65" cy="40" r="5" fill="#fff"/>
-                        <path d="M 30 65 Q 50 80 70 65" stroke="#fff" stroke-width="3" fill="none"/>
-                    </svg>
-                `;
-                
-                const imageData = 'data:image/svg+xml;base64,' + btoa(svgContent);
-                
-                const newChar = {
-                    id: 'ai_' + Date.now(),
-                    name: randomName,
-                    level: 1,
-                    image: imageData,
-                    isAI: true
-                };
-                
-                characters.push(newChar);
-                saveCharacters();
-                
-                resultDiv.innerHTML = `
-                    <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 15px;">
-                        <img src="${newChar.image}" style="width: 100px; height: 100px; object-fit: contain;">
-                        <h3 style="margin: 10px 0;">${newChar.name}</h3>
-                        <p style="color: #ffd700;">Уровень 1</p>
-                    </div>
-                `;
-                
-                selectCharacter(newChar.id);
-                renderExistingGallery();
-                
-                btn.disabled = false;
-                btn.textContent = '✨ Создать ИИ бойца';
-            }, 1500);
-        }
-        function saveDrawing() {
-            const name = prompt('Введите имя бойца:', 'Безымянный Герой');
-            if (!name) return;
-            
-            const imageData = canvas.toDataURL('image/png');
-            
-            const newChar = {
-                id: 'draw_' + Date.now(),
-                name: name,
-                level: 1,
-                image: imageData,
-                isDrawn: true
-            };
-            
-            characters.push(newChar);
-            saveCharacters();
-            
-            alert(`✅ Боец "${name}" сохранен!`);
-            
-            selectCharacter(newChar.id);
-            currentTab = 'existing';
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.toggle('active', b.dataset.tab === 'existing');
-            });
-            updateGalleryView();
-            renderExistingGallery();
+        });
+        canvas.addEventListener('touchend', () => {
+            const mouseEvent = new MouseEvent('mouseup', {});
+            canvas.dispatchEvent(mouseEvent);
+        });
+    }
+
+    function startDraw(e) {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        ctx.stroke();
+    }
+
+    function stopDraw() {
+        isDrawing = false;
+    }
+
+    function setColor(color) {
+        drawColor = color;
+        ctx.strokeStyle = color;
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function clearCanvas() {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function saveDrawing() {
+        const dataURL = canvas.toDataURL();
+        const name = prompt("Введите имя героя:", generateName());
+        if (name) {
+            createHero('draw', { image: dataURL, name: name });
             clearCanvas();
+            switchTab('heroes');
         }
-        function clearCanvas() {
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // --- Shop Logic ---
+    function renderShop() {
+        const container = document.getElementById('shop-list');
+        container.innerHTML = '';
+        
+        state.shopItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `
+                <div>
+                    <div style="font-weight:bold; color:var(--primary)">${item.name}</div>
+                    <div style="font-size:0.8rem; color:#aaa">Увеличивает характеристику навсегда</div>
+                </div>
+                <button class="action-btn" style="width:100px; background:${state.gold >= item.cost ? 'var(--success)' : '#555'}" 
+                    onclick="buyItem(${item.id})" ${state.gold < item.cost ? 'disabled' : ''}>
+                    ${item.cost} 💰
+                </button>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function buyItem(id) {
+        const item = state.shopItems.find(i => i.id === id);
+        if (!item || state.gold < item.cost) return;
+
+        if (!selectedHeroId) {
+            showNotification("Сначала выберите героя!");
+            switchTab('heroes');
+            return;
         }
-        function selectCharacter(id) {
-            selectedCharacterId = id;
-            renderExistingGallery();
-            updateUI();
+
+        const hero = state.heroes.find(h => h.id === selectedHeroId);
+        if (!hero) return;
+
+        state.gold -= item.cost;
+        
+        if (item.type === 'str') hero.stats.str += item.val;
+        if (item.type === 'spd') hero.stats.spd += item.val;
+        if (item.type === 'mag') hero.stats.mag += item.val;
+
+        saveState();
+        renderShop();
+        renderHeroes();
+        showNotification(`Куплено: ${item.name}`);
+    }
+
+    // --- Quests Logic ---
+    function renderQuests() {
+        const container = document.getElementById('quests-list');
+        container.innerHTML = '';
+        
+        let hasActive = false;
+        state.quests.forEach(q => {
+            if (q.claimed) return;
+            hasActive = true;
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `
+                <div>
+                    <div>${q.text}</div>
+                    <div class="quest-reward">Награда: ${q.reward} 💰</div>
+                </div>
+                <button class="action-btn" style="width:100px;" 
+                    onclick="claimQuest(${q.id})" ${!q.completed ? 'disabled' : ''}>
+                    ${q.completed ? 'Забрать' : 'В прогрессе'}
+                </button>
+            `;
+            container.appendChild(div);
+        });
+
+        if (!hasActive) {
+            container.innerHTML = '<p>Все задания выполнены! Заходите завтра.</p>';
         }
-        function getSelectedCharacter() {
-            return characters.find(c => c.id === selectedCharacterId);
+    }
+
+    function checkQuestProgress(type) {
+        let updated = false;
+        if (type === 'battle') {
+            const q = state.quests.find(x => x.text.includes("битву"));
+            if (q && !q.completed) { q.completed = true; updated = true; }
         }
-        function updateUI() {
-            const selectedChar = getSelectedCharacter();
+        if (type === 'create_hero') {
+            const q = state.quests.find(x => x.text.includes("героя"));
+            if (q && !q.completed) { q.completed = true; updated = true; }
+        }
+        if (type === 'gold_check') {
+            const q = state.quests.find(x => x.text.includes("золота"));
+            if (q && !q.completed && state.gold >= 100) { q.completed = true; updated = true; }
+        }
+
+        if (updated) {
+            saveState();
+            if (document.getElementById('quests').classList.contains('active')) renderQuests();
+        }
+    }
+
+    function claimQuest(id) {
+        const q = state.quests.find(x => x.id === id);
+        if (!q || !q.completed || q.claimed) return;
+
+        state.gold += q.reward;
+        q.claimed = true;
+        saveState();
+        renderQuests();
+        showNotification(`Получено ${q.reward} золота!`);
+    }
+
+    // --- Battle System ---
+    function startGame() {
+        if (!selectedHeroId) return;
+        const hero = state.heroes.find(h => h.id === selectedHeroId);
+        
+        // Generate Enemy
+        const enemyPower = Math.floor((hero.stats.str + hero.stats.spd + hero.stats.mag) / 3);
+        const enemy = {
+            name: ['Гоблин', 'Орк', 'Скелет', 'Дракончик', 'Тролль'][Math.floor(Math.random()*5)],
+            maxHp: enemyPower * 3,
+            hp: enemyPower * 3,
+            dmg: Math.floor(enemyPower * 0.8)
+        };
+
+        currentBattle = {
+            player: {
+                name: hero.name,
+                maxHp: (hero.stats.str + hero.stats.exp) * 2,
+                hp: (hero.stats.str + hero.stats.exp) * 2,
+                dmg: Math.floor(hero.stats.str * 1.5),
+                speed: hero.stats.spd
+            },
+            enemy: enemy,
+            turn: 0
+        };
+
+        // Setup UI
+        document.getElementById('battle-screen').style.display = 'flex';
+        document.getElementById('battle-player-name').textContent = currentBattle.player.name;
+        document.getElementById('battle-enemy-name').textContent = currentBattle.enemy.name;
+        document.getElementById('battle-log').innerHTML = '<div class="log-sys">Битва началась!</div>';
+        
+        updateBattleUI();
+        document.getElementById('battle-controls').style.display = 'block';
+        document.getElementById('battle-end-controls').style.display = 'none';
+    }
+
+    function updateBattleUI() {
+        const p = currentBattle.player;
+        const e = currentBattle.enemy;
+
+        const pPct = (p.hp / p.maxHp) * 100;
+        const ePct = (e.hp / e.maxHp) * 100;
+
+        document.getElementById('player-hp-bar').style.width = `${Math.max(0, pPct)}%`;
+        document.getElementById('player-hp-text').textContent = `${Math.max(0, p.hp)}/${p.maxHp}`;
+        
+        document.getElementById('enemy-hp-bar').style.width = `${Math.max(0, ePct)}%`;
+        document.getElementById('enemy-hp-text').textContent = `${Math.max(0, e.hp)}/${e.maxHp}`;
+    }
+
+    function logBattle(msg, type) {
+        const log = document.getElementById('battle-log');
+        const div = document.createElement('div');
+        div.className = `log-entry log-${type}`;
+        div.textContent = msg;
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function battleAttack() {
+        if (!currentBattle) return;
+
+        // Player Turn
+        const dmg = currentBattle.player.dmg + Math.floor(Math.random() * 5);
+        currentBattle.enemy.hp -= dmg;
+        logBattle(`Вы нанесли ${dmg} урона!`, 'player');
+        
+        if (currentBattle.enemy.hp <= 0) {
+            endBattle(false, true);
+            return;
+        }
+
+        updateBattleUI();
+
+        // Enemy Turn (delayed)
+        setTimeout(() => {
+            if (!currentBattle) return;
+            const enemyDmg = Math.max(1, currentBattle.enemy.dmg - Math.floor(currentBattle.player.stats?.exp / 10)); // Exp reduces dmg slightly
+            currentBattle.player.hp -= enemyDmg;
+            logBattle(`${currentBattle.enemy.name} нанес ${enemyDmg} урона!`, 'enemy');
             
-            if (selectedChar) {
-                document.getElementById('current-character').src = selectedChar.image;
-                document.getElementById('char-name').textContent = selectedChar.name;
-                document.getElementById('char-level').textContent = `Уровень ${selectedChar.level}`;
+            if (currentBattle.player.hp <= 0) {
+                endBattle(false, false);
             } else {
-                document.getElementById('current-character').src = '';
-                document.getElementById('char-name').textContent = 'Выберите бойца';
-                document.getElementById('char-level').textContent = '';
+                updateBattleUI();
             }
+        }, 600);
+    }
+
+    function endBattle(abandoned, won = false) {
+        document.getElementById('battle-screen').style.display = 'none';
+        
+        if (won) {
+            const rewardGold = 20 + Math.floor(Math.random() * 10);
+            state.gold += rewardGold;
+            state.rating += 10;
+            showNotification(`Победа! Получено ${rewardGold} золота`);
+            checkQuestProgress('battle');
+            checkQuestProgress('gold_check');
+        } else if (!abandoned) {
+            showNotification("Поражение! Попробуйте улучшить героя.");
         }
-    </script>
+
+        currentBattle = null;
+        saveState();
+    }
+
+    // Start
+    init();
+
+</script>
 </body>
 </html>
