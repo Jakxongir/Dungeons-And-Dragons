@@ -1,49 +1,41 @@
-$ edit /workspace/index.html
-edit /workspace/index.html
-ERROR:
-No replacement was performed, old_str `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brawl Stars Style Menu</title>
     <style>
-        /* Основной контейнер фона */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /* Твой переливающийся фон */
         .animated-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Чтобы фон был позади всего контента */
-            
-            /* Градиент с нужными цветами */
+            z-index: -1;
             background: linear-gradient(
                 -45deg, 
-                #ff9a3c,   /* Оранжевый */
-                #ff5e62,   /* Оранжево-розовый */
-                #ff7eb9,   /* Розовый */
-                #c471ed,   /* Светло-фиолетовый */
-                #a259ff,   /* Насыщенный фиолетовый */
-                #ff9a3c    /* Снова оранжевый для замыкания круга */
+                #ff9a3c,
+                #ff5e62,
+                #ff7eb9,
+                #c471ed,
+                #a259ff,
+                #ff9a3c
             );
-            
             background-size: 400% 400%;
             animation: gradientShift 10s ease infinite;
         }
-        /* Анимация переливания */
         @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        /* Дополнительный эффект пульсации (опционально) */
         .animated-background::before {
             content: '';
             position: absolute;
@@ -57,372 +49,391 @@ No replacement was performed, old_str `<!DOCTYPE html>
                 transparent 60%
             );
             animation: pulseOverlay 5s ease-in-out infinite alternate;
-            pointer-events: none; /* Чтобы не мешал кликам */
+            pointer-events: none;
         }
         @keyframes pulseOverlay {
             0% { opacity: 0.3; transform: scale(1); }
             100% { opacity: 0.6; transform: scale(1.1); }
-        } 
+        }
         body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            overflow: hidden;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            color: white;
+            overflow-x: hidden;
         }
-        /* Верхняя панель */
+        /* Верхняя панель с ресурсами */
         .top-bar {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
         }
         .currency-container {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
         .currency-item {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 5px 12px;
-            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
             font-weight: bold;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         .currency-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .gems .currency-icon { background: #e74c3c; }
+        .coins .currency-icon { background: #f1c40f; }
+        .tokens .currency-icon { background: #3498db; }
+        .add-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
             width: 20px;
             height: 20px;
             border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .add-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
         /* Основной контент */
         .main-content {
             flex: 1;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 20px;
-            position: relative;
+            gap: 20px;
         }
-        /* Левая панель (Меню) */
+        /* Левое меню */
         .left-sidebar {
+            width: 80px;
             display: flex;
             flex-direction: column;
             gap: 15px;
+            align-items: center;
         }
         .menu-btn {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #6e45e2, #88d3ce);
-            border: 3px solid white;
             border-radius: 15px;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             font-size: 24px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            color: white;
-            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         .menu-btn:hover {
-            transform: scale(1.1) rotate(-5deg);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
-        /* Центр (Боец) */
+        /* Центральная часть */
         .center-stage {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            position: relative;
+            gap: 20px;
         }
         .character-display {
             width: 300px;
             height: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            border: 5px solid rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
             display: flex;
-            justify-content: center;
             align-items: center;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.2);
+            justify-content: center;
             position: relative;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
         .character-img {
             max-width: 90%;
             max-height: 90%;
             object-fit: contain;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
         }
-        .character-name {
-            margin-top: 20px;
-            font-size: 32px;
-            font-weight: 900;
-            text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-            letter-spacing: 2px;
+        .character-info {
             text-align: center;
-        }
-        /* Правая панель (Инфо) */
-        .right-sidebar {
-            width: 250px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
-        .stat-row {
+        .character-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .character-level {
+            font-size: 16px;
+            color: #ffd700;
             margin-bottom: 15px;
         }
-        .stat-label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .progress-bar {
-            height: 15px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd700, #ff8c00);
-            width: 0%;
-            transition: width 1s ease-out;
-        }
-        /* Нижняя панель */
-        .bottom-bar {
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-        }
-        .play-btn {
-            background: linear-gradient(180deg, #ffd700, #ff8c00);
-            border: 4px solid #fff;
-            color: #4a3b00;
-            font-size: 36px;
-            font-weight: 900;
-            padding: 15px 80px;
-            border-radius: 50px;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 10px 0 #b8860b, 0 20px 20px rgba(0,0,0,0.5);
-            transition: all 0.1s;
-            position: relative;
-            overflow: hidden;
-        }
-        .play-btn:active {
-            transform: translateY(10px);
-            box-shadow: 0 0 0 #b8860b, inset 0 5px 10px rgba(0,0,0,0.3);
-        }
-        .play-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-        @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 100%; }
-            100% { left: 100%; }
-        }
-        /* Интерфейс создания/выбора */
-        .creation-panel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 800px;
-            height: 80%;
-            background: rgba(20, 10, 40, 0.95);
-            border: 4px solid #ffd700;
-            border-radius: 20px;
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        }
-        .creation-panel.active {
-            display: flex;
-        }
-        .tabs {
+        /* Вкладки галереи */
+        .gallery-tabs {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid rgba(255,255,255,0.2);
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .tab-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: white;
             padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: white;
             font-weight: bold;
-            font-size: 16px;
-            transition: background 0.3s;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         .tab-btn.active {
             background: #ffd700;
-            color: #4a3b00;
+            color: #333;
+            border-color: #ffd700;
+            transform: scale(1.05);
         }
-        .tab-content {
-            flex: 1;
-            display: none;
-            overflow-y: auto;
+        .gallery-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
-        .tab-content.active {
-            display: block;
-        }
-        /* Галерея */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
         }
         .gallery-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             padding: 10px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s, border 0.2s;
+            transition: all 0.3s ease;
             border: 2px solid transparent;
-            position: relative;
         }
         .gallery-item:hover {
-            transform: scale(1.05);
-            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
         }
         .gallery-item.selected {
             border-color: #ffd700;
-            box-shadow: 0 0 15px #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
         .gallery-item img {
-            width: 100%;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            background: rgba(0,0,0,0.3);
-            border-radius: 5px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
         }
-        .gallery-item p {
-            margin: 5px 0 0;
+        .gallery-item-name {
             font-size: 12px;
-            word-break: break-word;
+            font-weight: bold;
         }
-        .delete-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: red;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            font-size: 12px;
+        .ai-section, .draw-section {
             display: none;
-        }
-        .gallery-item:hover .delete-btn {
-            display: block;
-        }
-        /* Холст */
-        .canvas-container {
-            display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100%;
+            gap: 15px;
+            width: 100%;
         }
-        canvas {
+        .ai-section.active, .draw-section.active {
+            display: flex;
+        }
+        .generate-btn {
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+        }
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.6);
+        }
+        .canvas-container {
             background: white;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        #drawingCanvas {
+            border: 2px solid #333;
             border-radius: 10px;
             cursor: crosshair;
-            touch-action: none;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background: white;
         }
-        .tools {
-            margin-top: 15px;
+        .color-picker {
             display: flex;
             gap: 10px;
-            align-items: center;
             flex-wrap: wrap;
             justify-content: center;
         }
         .color-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 2px solid white;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .color-btn.active {
-            transform: scale(1.2);
-            border-color: #ffd700;
-        }
-        .action-btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .action-btn.clear { background: #f44336; }
-        .action-btn.save { background: #2196F3; }
-        .close-panel {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            font-size: 24px;
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            border: 3px solid white;
             cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-        
-        .close-panel:hover { background: red; }
-        /* Адаптив */
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+        .color-btn.active {
+            border-color: #333;
+            transform: scale(1.15);
+        }
+        .brush-size {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .brush-size input {
+            width: 150px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        .save-btn {
+            background: #2ecc71;
+            color: white;
+        }
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        /* Нижняя панель с кнопкой ИГРАТЬ */
+        .bottom-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .play-btn {
+            padding: 20px 80px;
+            background: linear-gradient(45deg, #ffd700, #f1c40f);
+            border: none;
+            border-radius: 30px;
+            color: #333;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: skew(-10deg);
+        }
+        .play-btn:hover {
+            transform: skew(-10deg) translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.7);
+        }
+        .play-btn:active {
+            transform: skew(-10deg) translateY(-2px) scale(0.98);
+        }
+        /* Адаптивность */
         @media (max-width: 768px) {
-            .main-content { flex-direction: column; }
-            .left-sidebar { flex-direction: row; order: 2; margin-top: 20px; }
-            .right-sidebar { display: none; }
-            .character-display { width: 200px; height: 200px; }
-            .play-btn { font-size: 24px; padding: 10px 40px; }
-            .creation-panel { width: 95%; height: 90%; }
+            .main-content {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .left-sidebar {
+                flex-direction: row;
+                width: 100%;
+                justify-content: center;
+                order: 3;
+            }
+            .center-stage {
+                order: 1;
+            }
+            .gallery-container {
+                order: 2;
+            }
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .currency-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .character-display {
+                width: 250px;
+                height: 250px;
+            }
+            .play-btn {
+                padding: 15px 50px;
+                font-size: 24px;
+            }
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #ffd700;
         }
     </style>
 </head>
@@ -431,22 +442,24 @@ No replacement was performed, old_str `<!DOCTYPE html>
     <div class="animated-background"></div>
     <!-- Верхняя панель -->
     <div class="top-bar">
-        <div class="player-info">
-            <span style="font-weight:bold; font-size: 18px;">Игрок: Герой</span>
-            <div style="font-size: 12px; opacity: 0.8;">Уровень 15</div>
+        <div class="logo">
+            <h1 style="font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Dungeons-And-Dragons</h1>
         </div>
         <div class="currency-container">
-            <div class="currency-item">
-                <div class="currency-icon" style="background: gold;"></div>
-                <span id="gold-count">1250</span>
+            <div class="currency-item gems">
+                <div class="currency-icon">💎</div>
+                <span id="gems-count">150</span>
+                <button class="add-btn">+</button>
             </div>
-            <div class="currency-item">
-                <div class="currency-icon" style="background: cyan;"></div>
-                <span id="gem-count">45</span>
+            <div class="currency-item coins">
+                <div class="currency-icon">🪙</div>
+                <span id="coins-count">2500</span>
+                <button class="add-btn">+</button>
             </div>
-            <div class="currency-item">
-                <div class="currency-icon" style="background: silver;"></div>
-                <span id="token-count">320</span>
+            <div class="currency-item tokens">
+                <div class="currency-icon">🎫</div>
+                <span id="tokens-count">75</span>
+                <button class="add-btn">+</button>
             </div>
         </div>
     </div>
@@ -454,293 +467,357 @@ No replacement was performed, old_str `<!DOCTYPE html>
     <div class="main-content">
         <!-- Левое меню -->
         <div class="left-sidebar">
-            <button class="menu-btn" title="Магазин">🛒</button>
-            <button class="menu-btn" title="Бойцы" onclick="openCreationPanel()">🦸</button>
-            <button class="menu-btn" title="Задания">📜</button>
-            <button class="menu-btn" title="Друзья">👥</button>
-            <button class="menu-btn" title="Настройки">⚙️</button>
+            <div class="menu-btn" title="Магазин">🛒</div>
+            <div class="menu-btn" title="Бойцы">🦸</div>
+            <div class="menu-btn" title="События">📅</div>
+            <div class="menu-btn" title="Клуб">🏆</div>
+            <div class="menu-btn" title="Друзья">👥</div>
         </div>
-        <!-- Центр (Боец) -->
+        <!-- Центральная часть -->
         <div class="center-stage">
+            <!-- Отображение персонажа -->
             <div class="character-display">
-                <img id="current-character-img" src="" alt="Выберите бойца" class="character-img">
+                <img id="current-character" class="character-img" src="" alt="Персонаж">
             </div>
-            <div class="character-name" id="current-character-name">Выберите бойца</div>
-            
-            <button style="margin-top: 15px; background: rgba(0,0,0,0.5); border: 1px solid white; color: white; padding: 5px 15px; border-radius: 15px; cursor: pointer;" onclick="openCreationPanel()">
-                ✏️ Изменить отряд
-            </button>
-        </div>
-        <!-- Правая панель (Статы) -->
-        <div class="right-sidebar">
-            <h3 style="margin-top: 0; text-align: center; color: #ffd700;">Характеристики</h3>
-            <div class="stat-row">
-                <div class="stat-label">Сила</div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 75%"></div></div>
+            <!-- Информация о персонаже -->
+            <div class="character-info">
+                <div class="character-name" id="char-name">Выберите бойца</div>
+                <div class="character-level" id="char-level">Уровень 1</div>
             </div>
-            <div class="stat-row">
-                <div class="stat-label">Скорость</div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 60%"></div></div>
+            <!-- Вкладки галереи -->
+            <div class="gallery-tabs">
+                <button class="tab-btn active" data-tab="existing">Существующие</button>
+                <button class="tab-btn" data-tab="ai">Галерея ИИ</button>
+                <button class="tab-btn" data-tab="draw">Нарисовать</button>
             </div>
-            <div class="stat-row">
-                <div class="stat-label">Магия</div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 90%"></div></div>
-            </div>
-            <div class="stat-row">
-                <div class="stat-label">Опыт</div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 45%"></div></div>
-            </div>
-            <div style="margin-top: 20px; font-size: 14px; line-height: 1.5; text-align: center;">
-                "Древнее зло пробудилось. Только ты можешь спасти королевство!"
+            <!-- Контейнер галереи -->
+            <div class="gallery-container">
+                <!-- Существующие бойцы -->
+                <div id="existing-gallery" class="gallery-grid">
+                    <!-- Загружается через JS -->
+                </div>
+                <!-- Галерея ИИ -->
+                <div id="ai-gallery" class="ai-section">
+                    <button class="generate-btn" id="generate-ai-btn">✨ Создать ИИ бойца</button>
+                    <div id="ai-result" style="margin-top: 20px; text-align: center;"></div>
+                </div>
+                <!-- Рисование -->
+                <div id="draw-gallery" class="draw-section">
+                    <div class="canvas-container">
+                        <canvas id="drawingCanvas" width="300" height="300"></canvas>
+                    </div>
+                    
+                    <div class="color-picker">
+                        <div class="color-btn active" style="background: #000000;" data-color="#000000"></div>
+                        <div class="color-btn" style="background: #ffffff;" data-color="#ffffff"></div>
+                        <div class="color-btn" style="background: #e74c3c;" data-color="#e74c3c"></div>
+                        <div class="color-btn" style="background: #3498db;" data-color="#3498db"></div>
+                        <div class="color-btn" style="background: #2ecc71;" data-color="#2ecc71"></div>
+                        <div class="color-btn" style="background: #f1c40f;" data-color="#f1c40f"></div>
+                    </div>
+                    
+                    <div class="brush-size">
+                        <label>Размер кисти:</label>
+                        <input type="range" id="brushSize" min="1" max="20" value="5">
+                        <span id="brushSizeValue">5</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn save-btn" id="save-drawing-btn">💾 Сохранить</button>
+                        <button class="action-btn clear-btn" id="clear-canvas-btn">🗑️ Очистить</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <!-- Нижняя панель -->
     <div class="bottom-bar">
-        <button class="play-btn" onclick="startGame()">В БОЙ!</button>
-    </div>
-    <!-- Панель создания/выбора -->
-    <div class="creation-panel" id="creationPanel">
-        <button class="close-panel" onclick="closeCreationPanel()">×</button>
-        <h2 style="text-align: center; margin-top: 0; color: #ffd700;">Выбор Персонажа</h2>
-        
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('existing')">Существующие</button>
-            <button class="tab-btn" onclick="switchTab('ai')">Галерея ИИ</button>
-            <button class="tab-btn" onclick="switchTab('draw')">Нарисовать</button>
-        </div>
-        <!-- Вкладка: Существующие -->
-        <div id="tab-existing" class="tab-content active">
-            <div class="gallery-grid" id="existing-gallery">
-                <!-- Сюда загружаются сохраненные -->
-            </div>
-            <p style="text-align: center; opacity: 0.7; font-size: 14px;">Нажмите на персонажа, чтобы выбрать его.</p>
-        </div>
-        <!-- Вкладка: ИИ -->
-        <div id="tab-ai" class="tab-content">
-            <div style="text-align: center; padding: 20px;">
-                <p>Сгенерируйте уникальное существо с помощью магического кристалла (ИИ).</p>
-                <button class="action-btn" style="background: #9c27b0; width: 100%; padding: 15px; font-size: 18px; margin-top: 20px;" onclick="generateAICharacter()">✨ Создать ИИ бойца</button>
-                <div id="ai-result" style="margin-top: 20px;"></div>
-            </div>
-        </div>
-        <!-- Вкладка: Рисование -->
-        <div id="tab-draw" class="tab-content">
-            <div class="canvas-container">
-                <canvas id="drawCanvas" width="400" height="300"></canvas>
-                <div class="tools">
-                    <div class="color-btn active" style="background: black;" onclick="setColor('black', this)"></div>
-                    <div class="color-btn" style="background: red;" onclick="setColor('red', this)"></div>
-                    <div class="color-btn" style="background: blue;" onclick="setColor('blue', this)"></div>
-                    <div class="color-btn" style="background: green;" onclick="setColor('green', this)"></div>
-                    <div class="color-btn" style="background: yellow;" onclick="setColor('yellow', this)"></div>
-                    <div class="color-btn" style="background: white;" onclick="setColor('white', this)"></div>
-                    <input type="range" id="brushSize" min="1" max="20" value="5" style="width: 100px;">
-                    <button class="action-btn clear" onclick="clearCanvas()">Очистить</button>
-                    <button class="action-btn save" onclick="saveDrawing()">Сохранить</button>
-                </div>
-            </div>
-        </div>
+        <button class="play-btn" id="play-btn">В БОЙ!</button>
     </div>
     <script>
-        // --- Логика данных ---
+        // Данные по умолчанию (если нет сохраненных)
+        const defaultCharacters = [
+            {
+                id: 'shelly_001',
+                name: 'Шелли',
+                level: 1,
+                image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iI2U3NGMzYyIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI1IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTSAzMCA2MCBMIDUwIDgwIEwgNzAgNjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PC9zdmc+'
+            },
+            {
+                id: 'colt_001',
+                name: 'Кольт',
+                level: 1,
+                image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzM0OThkYiIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI1IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTSAzNSA2NSBMIDY1IDY1IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIvPjwvc3ZnPg=='
+            },
+            {
+                id: 'bull_001',
+                name: 'Бык',
+                level: 1,
+                image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzJjYzJjYyIvPjxjaXJjbGUgY3g9IjM1IiBjeT0iNDAiIHI9IjUiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSI2NSIgY3k9IjQwIiByPSI1IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTSAyNSA1NSBMIDM1IDY1IEwgNDUgNTUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PHBhdGggZD0iTSA1NSA1NSBMIDY1IDY1IEwgNzUgNTUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PC9zdmc+'
+            }
+        ];
+        // Состояние приложения
         let characters = [];
-        let selectedCharId = null;
-        // Загрузка из localStorage при старте
+        let selectedCharacterId = null;
+        let currentTab = 'existing';
+        // Элементы Canvas
+        let canvas, ctx;
+        let isDrawing = false;
+        let currentColor = '#000000';
+        let brushSize = 5;
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            initCanvas();
+            loadCharacters();
+            setupEventListeners();
+            updateUI();
+        });
+        function initCanvas() {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Белый фон
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Обработчики событий рисования
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Для мобильных
+            canvas.addEventListener('touchstart', handleTouchStart);
+            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX || x, lastY || y);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            
+            lastX = x;
+            lastY = y;
+        }
+        function stopDrawing() {
+            isDrawing = false;
+            lastX = null;
+            lastY = null;
+        }
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
         function loadCharacters() {
-            const saved = localStorage.getItem('characters');
+            const saved = localStorage.getItem('brawl_characters');
             if (saved) {
                 characters = JSON.parse(saved);
             } else {
-                // Дефолтные персонажи если пусто
-                characters = [
-                    { id: 1, name: "Дракон", src: "https://cdn-icons-png.flaticon.com/512/3069/3069172.png" },
-                    { id: 2, name: "Рыцарь", src: "https://cdn-icons-png.flaticon.com/512/3408/3408506.png" },
-                    { id: 3, name: "Маг", src: "https://cdn-icons-png.flaticon.com/512/3069/3069162.png" }
-                ];
-                saveToStorage();
+                characters = [...defaultCharacters];
+                saveCharacters();
             }
-            renderGallery();
+        }
+        function saveCharacters() {
+            localStorage.setItem('brawl_characters', JSON.stringify(characters));
+        }
+        function setupEventListeners() {
+            // Переключение вкладок
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentTab = btn.dataset.tab;
+                    updateGalleryView();
+                });
+            });
+            // Генерация ИИ
+            document.getElementById('generate-ai-btn').addEventListener('click', generateAICharacter);
+            // Выбор цвета
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentColor = btn.dataset.color;
+                });
+            });
+            // Размер кисти
+            document.getElementById('brushSize').addEventListener('input', (e) => {
+                brushSize = e.target.value;
+                document.getElementById('brushSizeValue').textContent = brushSize;
+            });
+            // Очистка холста
+            document.getElementById('clear-canvas-btn').addEventListener('click', clearCanvas);
+            // Сохранение рисунка
+            document.getElementById('save-drawing-btn').addEventListener('click', saveDrawing);
+            // Кнопка игры
+            document.getElementById('play-btn').addEventListener('click', () => {
+                if (selectedCharacterId) {
+                    alert(`⚔️ В бой отправляется: ${getSelectedCharacter().name}!`);
+                } else {
+                    alert('⚠️ Сначала выберите бойца!');
+                }
+            });
+        }
+        function updateGalleryView() {
+            document.getElementById('existing-gallery').style.display = currentTab === 'existing' ? 'grid' : 'none';
+            document.getElementById('ai-gallery').style.display = currentTab === 'ai' ? 'flex' : 'none';
+            document.getElementById('draw-gallery').style.display = currentTab === 'draw' ? 'flex' : 'none';
             
-            // Выбираем первого по умолчанию если ничего не выбрано
-            if (!selectedCharId && characters.length > 0) {
-                selectCharacter(characters[0].id);
+            if (currentTab === 'existing') {
+                renderExistingGallery();
             }
         }
-        function saveToStorage() {
-            localStorage.setItem('characters', JSON.stringify(characters));
-            renderGallery();
-        }
-        // --- Рендер галереи ---
-        function renderGallery() {
+        function renderExistingGallery() {
             const container = document.getElementById('existing-gallery');
             container.innerHTML = '';
             
             characters.forEach(char => {
-                const div = document.createElement('div');
-                div.className = `gallery-item ${char.id === selectedCharId ? 'selected' : ''}`;
-                div.onclick = () => selectCharacter(char.id);
-                
-                div.innerHTML = `
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteCharacter(${char.id})">✖</button>
-                    <img src="${char.src}" alt="${char.name}">
-                    <p>${char.name}</p>
+                const item = document.createElement('div');
+                item.className = `gallery-item ${char.id === selectedCharacterId ? 'selected' : ''}`;
+                item.innerHTML = `
+                    <img src="${char.image}" alt="${char.name}">
+                    <div class="gallery-item-name">${char.name}</div>
                 `;
-                container.appendChild(div);
+                item.addEventListener('click', () => selectCharacter(char.id));
+                container.appendChild(item);
             });
         }
-        function selectCharacter(id) {
-            selectedCharId = id;
-            const char = characters.find(c => c.id === id);
-            if (char) {
-                document.getElementById('current-character-img').src = char.src;
-                document.getElementById('current-character-name').textContent = char.name;
-                renderGallery(); // Обновить выделение
-            }
-        }
-        function deleteCharacter(id) {
-            if (confirm('Удалить этого бойца?')) {
-                characters = characters.filter(c => c.id !== id);
-                saveToStorage();
-                if (selectedCharId === id) {
-                    selectedCharId = null;
-                    document.getElementById('current-character-img').src = "";
-                    document.getElementById('current-character-name').textContent = "Выберите бойца";
-                }
-            }
-        }
-        // --- Управление вкладками ---
-        function openCreationPanel() {
-            document.getElementById('creationPanel').classList.add('active');
-            loadCharacters(); // Обновить список
-        }
-        function closeCreationPanel() {
-            document.getElementById('creationPanel').classList.remove('active');
-        }
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            event.target.classList.add('active');
-        }
-        // --- Рисование ---
-        const canvas = document.getElementById('drawCanvas');
-        const ctx = canvas.getContext('2d');
-        let painting = false;
-        let currentColor = 'black';
-        function startPosition(e) {
-            painting = true;
-            draw(e);
-        }
-        function endPosition() {
-            painting = false;
-            ctx.beginPath();
-        }
-        function draw(e) {
-            if (!painting) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX || e.touches[0].clientX) - rect.left;
-            const y = (e.clientY || e.touches[0].clientY) - rect.top;
-            
-            ctx.lineWidth = document.getElementById('brushSize').value;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = currentColor;
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-        }
-        canvas.addEventListener('mousedown', startPosition);
-        canvas.addEventListener('mouseup', endPosition);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('touchstart', startPosition);
-        canvas.addEventListener('touchend', endPosition);
-        canvas.addEventListener('touchmove', draw);
-        function setColor(color, btn) {
-            currentColor = color;
-            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-        function clearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        function saveDrawing() {
-            const dataURL = canvas.toDataURL();
-            const name = prompt("Назовите вашего героя:", "Мой Герой");
-            if (name) {
-                const newChar = {
-                    id: Date.now(),
-                    name: name,
-                    src: dataURL
-                };
-                characters.push(newChar);
-                saveToStorage();
-                selectCharacter(newChar.id);
-                alert("Герой сохранен в отряд!");
-                switchTab('existing');
-                document.querySelector('.tab-btn').click(); // Переключить на первую вкладку визуально
-            }
-        }
-        // --- ИИ Генерация (Имитация) ---
         function generateAICharacter() {
-            const btn = document.querySelector('#tab-ai .action-btn');
+            const btn = document.getElementById('generate-ai-btn');
             const resultDiv = document.getElementById('ai-result');
             
             btn.disabled = true;
-            btn.textContent = "🔮 Магия создает существо...";
-            resultDiv.innerHTML = "";
+            btn.textContent = '⏳ Создание...';
+            resultDiv.innerHTML = '<div class="loading">ИИ создает уникального бойца...</div>';
+            
+            // Имитация задержки генерации
             setTimeout(() => {
-                // Генерируем случайный цвет и форму через SVG данные
-                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                const shapes = ['circle', 'square', 'triangle'];
-                const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+                const names = ['Тень', 'Феникс', 'Гром', 'Сторм', 'Блейд', 'Випер', 'Фрост', 'Вулкан'];
+                const randomName = names[Math.floor(Math.random() * names.length)] + ' ' + Math.floor(Math.random() * 100);
                 
-                // Создаем простой SVG как изображение
-                let svgContent = '';
-                if(randomShape === 'circle') {
-                    svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><circle cx='100' cy='100' r='80' fill='${randomColor}' stroke='white' stroke-width='5'/><circle cx='70' cy='80' r='10' fill='white'/><circle cx='130' cy='80' r='10' fill='white'/><path d='M 60 140 Q 100 180 140 140' stroke='white' stroke-width='5' fill='none'/></svg>`;
-                } else if (randomShape === 'square') {
-                    svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><rect x='20' y='20' width='160' height='160' fill='${randomColor}' stroke='white' stroke-width='5'/><circle cx='70' cy='80' r='10' fill='white'/><circle cx='130' cy='80' r='10' fill='white'/><rect x='60' y='140' width='80' height='20' fill='white'/></svg>`;
-                } else {
-                    svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><polygon points='100,20 20,180 180,180' fill='${randomColor}' stroke='white' stroke-width='5'/><circle cx='80' cy='100' r='10' fill='white'/><circle cx='120' cy='100' r='10' fill='white'/><path d='M 70 140 Q 100 160 130 140' stroke='white' stroke-width='5' fill='none'/></svg>`;
-                }
-                const svgUrl = 'data:image/svg+xml;base64,' + btoa(svgContent);
-                const name = "ИИ Существо #" + Math.floor(Math.random() * 1000);
+                // Генерация случайного цвета
+                const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#e67e22'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Создание простого SVG изображения
+                const svgContent = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" fill="${randomColor}"/>
+                        <circle cx="35" cy="40" r="5" fill="#fff"/>
+                        <circle cx="65" cy="40" r="5" fill="#fff"/>
+                        <path d="M 30 65 Q 50 80 70 65" stroke="#fff" stroke-width="3" fill="none"/>
+                    </svg>
+                `;
+                
+                const imageData = 'data:image/svg+xml;base64,' + btoa(svgContent);
+                
                 const newChar = {
-                    id: Date.now(),
-                    name: name,
-                    src: svgUrl
+                    id: 'ai_' + Date.now(),
+                    name: randomName,
+                    level: 1,
+                    image: imageData,
+                    isAI: true
                 };
                 
                 characters.push(newChar);
-                saveToStorage();
-                selectCharacter(newChar.id);
+                saveCharacters();
+                
                 resultDiv.innerHTML = `
-                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
-                        <img src="${svgUrl}" style="width: 100px; display:block; margin: 0 auto;">
-                        <p style="text-align:center; color: #ffd700;">${name}</p>
-                        <p style="text-align:center; font-size: 12px;">Добавлено в отряд!</p>
+                    <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 15px;">
+                        <img src="${newChar.image}" style="width: 100px; height: 100px; object-fit: contain;">
+                        <h3 style="margin: 10px 0;">${newChar.name}</h3>
+                        <p style="color: #ffd700;">Уровень 1</p>
                     </div>
                 `;
                 
+                selectCharacter(newChar.id);
+                renderExistingGallery();
+                
                 btn.disabled = false;
-                btn.textContent = "✨ Создать еще одного";
+                btn.textContent = '✨ Создать ИИ бойца';
             }, 1500);
         }
-        // --- Старт игры ---
-        function startGame() {
-            if (!selectedCharId) {
-                alert("Сначала выберите бойца!");
-                openCreationPanel();
-                return;
-            }
-            const char = characters.find(c => c.id === selectedCharId);
-            alert(`⚔️ ${char.name} отправляется в подземелье! \n(Здесь начнется игра)`);
+        function saveDrawing() {
+            const name = prompt('Введите имя бойца:', 'Безымянный Герой');
+            if (!name) return;
+            
+            const imageData = canvas.toDataURL('image/png');
+            
+            const newChar = {
+                id: 'draw_' + Date.now(),
+                name: name,
+                level: 1,
+                image: imageData,
+                isDrawn: true
+            };
+            
+            characters.push(newChar);
+            saveCharacters();
+            
+            alert(`✅ Боец "${name}" сохранен!`);
+            
+            selectCharacter(newChar.id);
+            currentTab = 'existing';
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === 'existing');
+            });
+            updateGalleryView();
+            renderExistingGallery();
+            clearCanvas();
         }
-        // Инициализация
-        window.onload = loadCharacters;
+        function clearCanvas() {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        function selectCharacter(id) {
+            selectedCharacterId = id;
+            renderExistingGallery();
+            updateUI();
+        }
+        function getSelectedCharacter() {
+            return characters.find(c => c.id === selectedCharacterId);
+        }
+        function updateUI() {
+            const selectedChar = getSelectedCharacter();
+            
+            if (selectedChar) {
+                document.getElementById('current-character').src = selectedChar.image;
+                document.getElementById('char-name').textContent = selectedChar.name;
+                document.getElementById('char-level').textContent = `Уровень ${selectedChar.level}`;
+            } else {
+                document.getElementById('current-character').src = '';
+                document.getElementById('char-name').textContent = 'Выберите бойца';
+                document.getElementById('char-level').textContent = '';
+            }
+        }
     </script>
 </body>
-</html>` did not appear verbatim in /workspace/index.html.
+</html>
