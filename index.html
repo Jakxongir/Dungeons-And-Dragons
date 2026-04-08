@@ -7,933 +7,896 @@
     <style>
         :root {
             --primary: #ffd700;
-            --danger: #ff4444;
-            --success: #00c851;
-            --info: #33b5e5;
-            --dark: #1a0b2e;
-            --panel: rgba(20, 10, 40, 0.9);
+            --danger: #ff4757;
+            --success: #2ed573;
+            --info: #1e90ff;
+            --dark: rgba(0, 0, 0, 0.7);
+            --panel: rgba(20, 20, 35, 0.85);
         }
+
+        * { box-sizing: border-box; user-select: none; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
-            overflow-x: hidden;
-            background: linear-gradient(-45deg, #ff9a3c, #ff5e62, #ff7eb9, #c471ed, #a259ff, #ff9a3c);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            min-height: 100vh;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* --- ТВОЙ ФОН --- */
+        .animated-background {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ff9a3c, #ff5e62, #ff7eb9, #c471ed, #a259ff, #ff9a3c);
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite;
+        }
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
-        /* UI Components */
-        .app-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
+        .animated-background::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1), transparent 60%);
+            animation: pulseOverlay 5s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes pulseOverlay {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.1); }
         }
 
-        .header {
+        /* --- UI LAYOUT --- */
+        header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            background: var(--panel);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            background: var(--dark);
+            backdrop-filter: blur(5px);
+            border-bottom: 2px solid var(--primary);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .resources {
-            display: flex;
-            gap: 15px;
-        }
-
+        .resources { display: flex; gap: 15px; }
         .res-item {
             background: rgba(0,0,0,0.5);
-            padding: 5px 12px;
+            padding: 5px 15px;
             border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 5px;
             font-weight: bold;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid #555;
+        }
+        .res-icon { font-size: 1.2em; }
+
+        main {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .nav-tabs {
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            animation: fadeIn 0.3s;
+        }
+        .screen.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* --- HERO GALLERY & CARDS --- */
+        .heroes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .hero-card {
+            background: var(--panel);
+            border: 2px solid #444;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative;
+        }
+        .hero-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .hero-card.selected { border-color: var(--success); box-shadow: 0 0 15px var(--success); }
+        
+        .hero-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #333;
+            margin: 0 auto 10px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .hero-name { font-size: 1.2em; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+        .hero-class { font-size: 0.9em; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            font-size: 0.85em;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .stat-row { display: flex; justify-content: space-between; }
+        .stat-val { font-weight: bold; }
+        .stat-str { color: #ff6b6b; }
+        .stat-spd { color: #4ecdc4; }
+        .stat-mag { color: #a29bfe; }
+        .stat-exp { color: #ffeaa7; }
+
+        /* --- TABS & NAV --- */
+        .nav-bar {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            padding: 10px;
+            background: var(--dark);
         }
-
-        .tab-btn {
-            background: var(--panel);
-            border: 2px solid var(--primary);
+        .nav-btn {
+            background: #333;
+            border: none;
             color: white;
             padding: 10px 20px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
+            transition: 0.2s;
+        }
+        .nav-btn.active { background: var(--primary); color: black; transform: scale(1.05); }
+        .nav-btn:hover:not(.active) { background: #555; }
+
+        /* --- BIG PLAY BUTTON --- */
+        .play-area {
+            text-align: center;
+            margin-top: auto;
+            padding-bottom: 20px;
+        }
+        .btn-play {
+            background: linear-gradient(45deg, #ffd700, #ffa502);
+            border: none;
+            padding: 15px 60px;
+            font-size: 2em;
+            font-weight: 900;
+            color: #333;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 0 #b38f00, 0 20px 20px rgba(0,0,0,0.5);
+            transition: transform 0.1s, box-shadow 0.1s;
             text-transform: uppercase;
+            animation: pulseBtn 2s infinite;
+        }
+        .btn-play:active {
+            transform: translateY(10px);
+            box-shadow: 0 0 0 #b38f00, inset 0 5px 10px rgba(0,0,0,0.2);
+        }
+        @keyframes pulseBtn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        .tab-btn:hover, .tab-btn.active {
-            background: var(--primary);
-            color: var(--dark);
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        .content-area {
+        /* --- SHOP & QUESTS --- */
+        .shop-item, .quest-item {
             background: var(--panel);
-            border-radius: 20px;
-            padding: 20px;
-            min-height: 400px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.5s; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Fighters Grid */
-        .fighters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .fighter-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
+            margin: 10px;
             padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .fighter-card:hover {
-            transform: scale(1.02);
-            border-color: var(--primary);
-        }
-
-        .fighter-card.selected {
-            border: 2px solid var(--success);
-            box-shadow: 0 0 20px rgba(0, 200, 81, 0.3);
-        }
-
-        .card-header {
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            border: 1px solid #555;
         }
-
-        .class-badge {
-            background: var(--info);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5px;
-            font-size: 0.9rem;
-            margin: 10px 0;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.3);
-            padding: 3px 5px;
-            border-radius: 4px;
-        }
-
-        .action-btn {
-            width: 100%;
-            padding: 10px;
+        .btn-buy, .btn-claim {
+            background: var(--success);
             border: none;
-            border-radius: 8px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 5px;
-            text-transform: uppercase;
         }
+        .btn-buy:disabled { background: #555; cursor: not-allowed; }
 
-        .btn-select { background: var(--primary); color: var(--dark); }
-        .btn-battle { 
-            background: var(--danger); 
-            color: white; 
-            font-size: 1.2rem; 
-            padding: 15px; 
-            margin-top: 20px;
-            box-shadow: 0 4px 0 #b30000;
-        }
-        .btn-battle:active { transform: translateY(4px); box-shadow: none; }
-        .btn-battle:disabled { background: #555; box-shadow: none; cursor: not-allowed; }
-
-        /* Shop & Quests */
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-        }
-
-        .quest-reward { color: var(--primary); font-weight: bold; }
-        
-        /* Battle Screen */
-        #battle-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .battle-arena {
-            width: 90%;
-            max-width: 800px;
-            text-align: center;
-        }
-
-        .combatants {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 40px 0;
-        }
-
-        .combatant {
-            width: 150px;
-            text-align: center;
-        }
-
-        .health-bar-container {
-            width: 100%;
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
-            margin: 10px 0;
-            overflow: hidden;
-            border: 2px solid white;
-        }
-
-        .health-bar {
-            height: 100%;
-            background: var(--success);
-            width: 100%;
-            transition: width 0.5s ease-out;
-        }
-
-        .battle-log {
-            height: 150px;
-            overflow-y: auto;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #444;
-            padding: 10px;
-            margin-bottom: 20px;
-            text-align: left;
-            font-family: monospace;
-            border-radius: 5px;
-        }
-
-        .log-entry { margin-bottom: 5px; }
-        .log-player { color: #4fc3f7; }
-        .log-enemy { color: #ff8a80; }
-        .log-sys { color: #ffd700; }
-
-        /* Drawing Canvas */
+        /* --- DRAWING CANVAS --- */
         .canvas-container {
-            text-align: center;
-        }
-        canvas {
             background: white;
             border-radius: 10px;
+            margin: 0 auto;
             cursor: crosshair;
             touch-action: none;
         }
-        .color-picker {
+        .tools {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin: 10px 0;
         }
         .color-btn {
-            width: 30px;
-            height: 30px;
+            width: 30px; height: 30px;
             border-radius: 50%;
             border: 2px solid white;
             cursor: pointer;
         }
-        .color-btn.active { transform: scale(1.2); border-color: var(--primary); }
+        .color-btn.active { transform: scale(1.2); border-color: black; }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--success);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transform: translateX(200%);
-            transition: transform 0.3s;
-            z-index: 1000;
+        /* --- BATTLE SCREEN --- */
+        #battle-screen {
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
         }
-        .notification.show { transform: translateX(0); }
+        .battle-arena {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px;
+            height: 60%;
+        }
+        .fighter {
+            text-align: center;
+            width: 200px;
+        }
+        .hp-bar-container {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+            border: 2px solid white;
+        }
+        .hp-bar-fill {
+            height: 100%;
+            background: #ff4757;
+            width: 100%;
+            transition: width 0.5s;
+        }
+        .battle-log {
+            height: 30%;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .log-entry { margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .log-player { color: #4ecdc4; }
+        .log-enemy { color: #ff6b6b; }
+
+        .action-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-<div class="notification" id="notification">Сообщение</div>
+    <!-- Фон -->
+    <div class="animated-background"></div>
 
-<!-- Battle Overlay -->
-<div id="battle-screen">
-    <div class="battle-arena">
-        <h2 style="color: var(--danger); text-transform: uppercase; letter-spacing: 3px;">Битва!</h2>
-        
-        <div class="combatants">
-            <div class="combatant" id="player-combatant">
-                <div id="battle-player-name" style="font-weight:bold; margin-bottom:5px;">Игрок</div>
-                <div class="health-bar-container">
-                    <div class="health-bar" id="player-hp-bar"></div>
-                </div>
-                <div id="player-hp-text">100/100</div>
-                <div style="font-size: 3rem; margin: 10px 0;">🦸</div>
-            </div>
-            
-            <div style="font-size: 2rem; font-weight: bold;">VS</div>
-            
-            <div class="combatant" id="enemy-combatant">
-                <div id="battle-enemy-name" style="font-weight:bold; margin-bottom:5px; color: #ff8a80;">Монстр</div>
-                <div class="health-bar-container">
-                    <div class="health-bar" id="enemy-hp-bar" style="background: var(--danger);"></div>
-                </div>
-                <div id="enemy-hp-text">100/100</div>
-                <div style="font-size: 3rem; margin: 10px 0;">👹</div>
-            </div>
-        </div>
-
-        <div class="battle-log" id="battle-log"></div>
-
-        <div id="battle-controls">
-            <button class="action-btn btn-battle" style="width: 200px;" onclick="battleAttack()">⚔️ АТАКА</button>
-            <button class="action-btn" style="background: #444; color: white; width: 200px; margin-top: 10px;" onclick="endBattle(true)">🏳️ Сдаться</button>
-        </div>
-        <div id="battle-end-controls" style="display:none;">
-            <button class="action-btn btn-battle" style="width: 200px;" onclick="endBattle(false)">🏠 В меню</button>
-        </div>
-    </div>
-</div>
-
-<div class="app-container">
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">Dungeons-And-Dragons</div>
+    <!-- Верхняя панель -->
+    <header>
+        <div style="font-weight:900; font-size:1.5em; color:var(--primary);">D&D</div>
         <div class="resources">
-            <div class="res-item">💰 <span id="gold-display">0</span></div>
-            <div class="res-item">💎 <span id="gems-display">0</span></div>
-            <div class="res-item">🏆 <span id="rating-display">0</span></div>
+            <div class="res-item"><span class="res-icon">💰</span> <span id="gold">0</span></div>
+            <div class="res-item"><span class="res-icon">💎</span> <span id="gems">0</span></div>
+            <div class="res-item"><span class="res-icon">🎫</span> <span id="tickets">0</span></div>
         </div>
-    </div>
+    </header>
 
-    <!-- Navigation -->
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('heroes')">Герои</button>
-        <button class="tab-btn" onclick="switchTab('create')">Создать (ИИ/Рис)</button>
-        <button class="tab-btn" onclick="switchTab('shop')">Магазин</button>
-        <button class="tab-btn" onclick="switchTab('quests')">Задания</button>
-    </div>
-
-    <!-- Content -->
-    <div class="content-area">
-        
-        <!-- Heroes Tab -->
-        <div id="heroes" class="tab-content active">
-            <h3>Ваши Герои</h3>
-            <p style="color: #aaa; font-size: 0.9rem;">Выберите героя для входа в бой</p>
-            <div class="fighters-grid" id="heroes-list"></div>
-            <button id="start-battle-btn" class="action-btn btn-battle" disabled onclick="startGame()">⚔️ В БОЙ!</button>
-        </div>
-
-        <!-- Create Tab -->
-        <div id="create" class="tab-content">
-            <div class="nav-tabs" style="margin-bottom: 10px;">
-                <button class="tab-btn active" onclick="setCreateMode('ai')">🤖 ИИ Генератор</button>
-                <button class="tab-btn" onclick="setCreateMode('draw')">🎨 Рисование</button>
+    <main>
+        <!-- ГЛАВНОЕ МЕНЮ / ГЕРОИ -->
+        <div id="screen-heroes" class="screen active">
+            <h2 style="text-align:center; text-shadow: 2px 2px 4px black;">Твои Герои</h2>
+            
+            <div class="tools" style="margin-bottom: 20px;">
+                <button class="nav-btn" onclick="showTab('gallery')">Галерея</button>
+                <button class="nav-btn" onclick="showTab('draw')">Нарисовать</button>
+                <button class="nav-btn" onclick="generateAIHero()">✨ ИИ Герой</button>
             </div>
 
-            <!-- AI Mode -->
-            <div id="ai-mode">
-                <div style="text-align: center; padding: 20px;">
-                    <p>ИИ создаст уникального героя со сбалансированными характеристиками.</p>
-                    <button class="action-btn btn-select" style="width: 200px;" onclick="generateAIHero()">✨ Создать Героя</button>
+            <!-- Вкладка Галереи -->
+            <div id="tab-gallery" class="heroes-grid">
+                <!-- Сюда рендерятся герои -->
+            </div>
+
+            <!-- Вкладка Рисования -->
+            <div id="tab-draw" style="display:none; flex-direction:column; align-items:center;">
+                <div class="tools">
+                    <div class="color-btn active" style="background:black;" onclick="setColor('black', this)"></div>
+                    <div class="color-btn" style="background:red;" onclick="setColor('red', this)"></div>
+                    <div class="color-btn" style="background:blue;" onclick="setColor('blue', this)"></div>
+                    <div class="color-btn" style="background:green;" onclick="setColor('green', this)"></div>
+                    <div class="color-btn" style="background:yellow;" onclick="setColor('yellow', this)"></div>
+                    <button class="nav-btn" style="padding:5px 10px; font-size:0.8em;" onclick="clearCanvas()">Очистить</button>
+                </div>
+                <canvas id="drawCanvas" class="canvas-container" width="300" height="300"></canvas>
+                <div style="margin-top:15px; display:flex; gap:10px;">
+                    <input type="text" id="heroNameInput" placeholder="Имя героя" style="padding:10px; border-radius:5px; border:none;">
+                    <button class="btn-buy" onclick="saveDrawing()">Сохранить</button>
                 </div>
             </div>
 
-            <!-- Draw Mode -->
-            <div id="draw-mode" style="display: none;">
-                <div class="canvas-container">
-                    <canvas id="drawCanvas" width="300" height="300"></canvas>
-                    <div class="color-picker">
-                        <div class="color-btn active" style="background: black;" onclick="setColor('black')"></div>
-                        <div class="color-btn" style="background: red;" onclick="setColor('red')"></div>
-                        <div class="color-btn" style="background: blue;" onclick="setColor('blue')"></div>
-                        <div class="color-btn" style="background: green;" onclick="setColor('green')"></div>
-                        <div class="color-btn" style="background: yellow;" onclick="setColor('yellow')"></div>
-                        <div class="color-btn" style="background: white;" onclick="setColor('white')"></div>
-                    </div>
-                    <button class="action-btn" style="width: 150px; background: #444; color: white;" onclick="clearCanvas()">Очистить</button>
-                    <button class="action-btn btn-select" style="width: 150px;" onclick="saveDrawing()">💾 Сохранить</button>
+            <div class="play-area">
+                <button class="btn-play" onclick="startBattle()">В БОЙ!</button>
+                <div id="selected-hero-info" style="margin-top:10px; color:#aaa;">Выберите героя для боя</div>
+            </div>
+        </div>
+
+        <!-- МАГАЗИН -->
+        <div id="screen-shop" class="screen">
+            <h2>Магазин</h2>
+            <div class="shop-item">
+                <div>
+                    <h3>Мешок золота</h3>
+                    <p>+100 💰</p>
                 </div>
+                <button class="btn-buy" onclick="buyItem('gold', 100, 10)">Купить (10 💎)</button>
+            </div>
+            <div class="shop-item">
+                <div>
+                    <h3>Сундук героя</h3>
+                    <p>Случайный предмет</p>
+                </div>
+                <button class="btn-buy" onclick="buyItem('chest', 1, 50)">Купить (50 💎)</button>
+            </div>
+            <div class="shop-item">
+                <div>
+                    <h3>Билет на бой</h3>
+                    <p>+1 🎫</p>
+                </div>
+                <button class="btn-buy" onclick="buyItem('ticket', 1, 5)">Купить (5 💎)</button>
             </div>
         </div>
 
-        <!-- Shop Tab -->
-        <div id="shop" class="tab-content">
-            <h3>Магазин Улучшений</h3>
-            <div id="shop-list">
-                <!-- Items injected by JS -->
-            </div>
-        </div>
-
-        <!-- Quests Tab -->
-        <div id="quests" class="tab-content">
-            <h3>Ежедневные Задания</h3>
+        <!-- ЗАДАНИЯ -->
+        <div id="screen-quests" class="screen">
+            <h2>Ежедневные задания</h2>
             <div id="quests-list">
-                <!-- Quests injected by JS -->
+                <!-- Задания генерируются JS -->
+            </div>
+            <button class="btn-buy" style="width:100%; margin-top:20px;" onclick="refreshQuests()">Обновить задания</button>
+        </div>
+
+        <!-- ЭКРАН БОЯ -->
+        <div id="screen-battle" class="screen">
+            <h2 style="text-align:center;">АРЕНА</h2>
+            <div class="battle-arena">
+                <div class="fighter">
+                    <div id="battle-player-img" class="hero-img" style="width:120px; height:120px;"></div>
+                    <h3 id="battle-player-name">Игрок</h3>
+                    <div class="hp-bar-container"><div id="player-hp" class="hp-bar-fill"></div></div>
+                    <p><span id="player-hp-text">100/100</span></p>
+                </div>
+                
+                <div style="font-size:3em; font-weight:bold;">VS</div>
+
+                <div class="fighter">
+                    <div id="battle-enemy-img" class="hero-img" style="width:120px; height:120px; background:#555;"></div>
+                    <h3 id="battle-enemy-name">Монстр</h3>
+                    <div class="hp-bar-container"><div id="enemy-hp" class="hp-bar-fill"></div></div>
+                    <p><span id="enemy-hp-text">100/100</span></p>
+                </div>
+            </div>
+            
+            <div class="battle-log" id="battle-log"></div>
+            
+            <div style="text-align:center;">
+                <button id="btn-attack" class="action-btn" onclick="battleAttack()">АТАКА</button>
+                <button id="btn-flee" class="nav-btn" style="margin-top:10px; background:#555;" onclick="endBattle(false)">Сбежать</button>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script>
-    // --- State Management ---
-    const defaultState = {
-        gold: 0,
-        gems: 0,
-        rating: 0,
-        heroes: [],
-        quests: [
-            { id: 1, text: "Провести 1 битву", reward: 50, completed: false, claimed: false },
-            { id: 2, text: "Создать 1 героя", reward: 30, completed: false, claimed: false },
-            { id: 3, text: "Накопить 100 золота", reward: 100, completed: false, claimed: false }
-        ],
-        shopItems: [
-            { id: 1, name: "Зелье Силы (+5)", cost: 50, type: 'str', val: 5 },
-            { id: 2, name: "Свиток Скорости (+5)", cost: 50, type: 'spd', val: 5 },
-            { id: 3, name: "Кристалл Магии (+5)", cost: 50, type: 'mag', val: 5 }
-        ]
-    };
+    <nav class="nav-bar">
+        <button class="nav-btn active" onclick="switchScreen('heroes', this)">Герои</button>
+        <button class="nav-btn" onclick="switchScreen('shop', this)">Магазин</button>
+        <button class="nav-btn" onclick="switchScreen('quests', this)">Задания</button>
+    </nav>
 
-    let state = JSON.parse(localStorage.getItem('dad_game_state')) || JSON.parse(JSON.stringify(defaultState));
-    
-    // Ensure new fields exist if loading old save
-    if (!state.gold) state.gold = 0;
-    if (!state.gems) state.gems = 0;
-    if (!state.rating) state.rating = 0;
-    if (!state.shopItems) state.shopItems = defaultState.shopItems;
-    
-    let selectedHeroId = null;
-    let currentBattle = null;
+    <script>
+        // --- ДАННЫЕ И СОСТОЯНИЕ ---
+        const CLASSES = [
+            { name: 'Танк', strMod: 1.5, spdMod: 0.8, magMod: 0.7, expMod: 1.0 },
+            { name: 'Воин', strMod: 1.2, spdMod: 1.0, magMod: 0.8, expMod: 1.0 },
+            { name: 'Маг', strMod: 0.7, spdMod: 0.9, magMod: 1.5, expMod: 1.2 },
+            { name: 'Убийца', strMod: 1.1, spdMod: 1.4, magMod: 0.8, expMod: 0.9 },
+            { name: 'Лучник', strMod: 0.9, spdMod: 1.3, magMod: 0.9, expMod: 1.0 },
+            { name: 'Жрец', strMod: 0.8, spdMod: 0.9, magMod: 1.2, expMod: 1.3 }
+        ];
 
-    // --- Initialization ---
-    function init() {
-        updateUI();
-        renderHeroes();
-        renderShop();
-        renderQuests();
-        setupCanvas();
-    }
+        const NAMES_PREFIX = ['Темный', 'Светлый', 'Безумный', 'Древний', 'Храбрый', 'Тихий', 'Огненный'];
+        const NAMES_BASE = ['Дракон', 'Рыцарь', 'Призрак', 'Гоблин', 'Эльф', 'Орк', 'Вампир', 'Паладин'];
 
-    function saveState() {
-        localStorage.setItem('dad_game_state', JSON.stringify(state));
-        updateUI();
-    }
-
-    function showNotification(msg) {
-        const el = document.getElementById('notification');
-        el.textContent = msg;
-        el.classList.add('show');
-        setTimeout(() => el.classList.remove('show'), 3000);
-    }
-
-    function updateUI() {
-        document.getElementById('gold-display').textContent = state.gold;
-        document.getElementById('gems-display').textContent = state.gems;
-        document.getElementById('rating-display').textContent = state.rating;
-    }
-
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        
-        document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
-        
-        if (tabId === 'heroes') renderHeroes();
-        if (tabId === 'shop') renderShop();
-        if (tabId === 'quests') renderQuests();
-    }
-
-    // --- Hero Logic ---
-    const CLASSES = [
-        { name: 'Танк', base: { str: 80, spd: 40, mag: 30, exp: 50 } },
-        { name: 'Воин', base: { str: 70, spd: 60, mag: 40, exp: 60 } },
-        { name: 'Маг', base: { str: 30, spd: 50, mag: 90, exp: 70 } },
-        { name: 'Убийца', base: { str: 60, spd: 90, mag: 40, exp: 50 } },
-        { name: 'Лучник', base: { str: 50, spd: 80, mag: 60, exp: 60 } },
-        { name: 'Жрец', base: { str: 40, spd: 50, mag: 80, exp: 80 } }
-    ];
-
-    const NAMES_PREFIX = ['Темный', 'Светлый', 'Дикий', 'Древний', 'Храбрый', 'Таинственный'];
-    const NAMES_ROOT = ['Воин', 'Странник', 'Хранитель', 'Охотник', 'Маг', 'Рыцарь'];
-
-    function generateName() {
-        return `${NAMES_PREFIX[Math.floor(Math.random()*NAMES_PREFIX.length)]} ${NAMES_ROOT[Math.floor(Math.random()*NAMES_ROOT.length)]}`;
-    }
-
-    function createHero(source, customData = null) {
-        const cls = CLASSES[Math.floor(Math.random() * CLASSES.length)];
-        let stats = { ...cls.base };
-        let name = generateName();
-        let isCustom = false;
-
-        // AI Balancing Logic
-        if (source === 'ai') {
-            // Add some randomness but keep class identity
-            Object.keys(stats).forEach(k => {
-                stats[k] = Math.min(100, Math.max(10, stats[k] + Math.floor(Math.random() * 20) - 10));
-            });
-        } 
-        else if (source === 'draw') {
-            isCustom = true;
-            name = customData.name || "Нарисованный Герой";
-            // Debuff logic for custom drawn heroes to prevent OP stats
-            // Base stats are lower, cap is lower
-            stats = { str: 50, spd: 50, mag: 50, exp: 50 };
-            const randClass = CLASSES[Math.floor(Math.random() * CLASSES.length)];
-            // Apply slight class bias but keep total power lower than AI
-            stats.str = Math.floor(randClass.base.str * 0.7);
-            stats.spd = Math.floor(randClass.base.spd * 0.7);
-            stats.mag = Math.floor(randClass.base.mag * 0.7);
-            stats.exp = Math.floor(randClass.base.exp * 0.7);
-            
-            // Random Debuff: One stat is significantly reduced
-            const debuffStat = Object.keys(stats)[Math.floor(Math.random()*4)];
-            stats[debuffStat] = Math.floor(stats[debuffStat] * 0.5);
-        }
-
-        const hero = {
-            id: Date.now(),
-            name: name,
-            class: cls.name,
-            stats: stats,
-            image: customData ? customData.image : null,
-            source: source
+        let state = {
+            gold: 0,
+            gems: 0,
+            tickets: 0,
+            heroes: [],
+            selectedHeroId: null,
+            quests: []
         };
 
-        state.heroes.push(hero);
-        saveState();
-        renderHeroes();
-        showNotification(`Герой ${hero.name} создан!`);
-        
-        // Complete quest if needed
-        checkQuestProgress('create_hero');
-    }
-
-    function generateAIHero() {
-        createHero('ai');
-    }
-
-    function renderHeroes() {
-        const container = document.getElementById('heroes-list');
-        container.innerHTML = '';
-        
-        if (state.heroes.length === 0) {
-            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">У вас нет героев. Создайте первого!</p>';
-            document.getElementById('start-battle-btn').disabled = true;
-            return;
-        }
-
-        state.heroes.forEach(hero => {
-            const card = document.createElement('div');
-            card.className = `fighter-card ${selectedHeroId === hero.id ? 'selected' : ''}`;
-            card.onclick = () => selectHero(hero.id);
-            
-            let imgHTML = hero.image 
-                ? `<img src="${hero.image}" style="width:100%; height:150px; object-fit:cover; border-radius:10px; margin-bottom:10px;">`
-                : `<div style="height:150px; background:rgba(0,0,0,0.3); border-radius:10px; margin-bottom:10px; display:flex; align-items:center; justify-content:center; font-size:3rem;">🛡️</div>`;
-
-            card.innerHTML = `
-                ${imgHTML}
-                <div class="card-header">
-                    <strong>${hero.name}</strong>
-                    <span class="class-badge">${hero.class}</span>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-row"><span>⚔️ Сила</span><span>${hero.stats.str}</span></div>
-                    <div class="stat-row"><span>⚡ Скор</span><span>${hero.stats.spd}</span></div>
-                    <div class="stat-row"><span>🔮 Магия</span><span>${hero.stats.mag}</span></div>
-                    <div class="stat-row"><span>⭐ Опыт</span><span>${hero.stats.exp}</span></div>
-                </div>
-                ${selectedHeroId === hero.id ? '<button class="action-btn" style="background:var(--success); color:white;">Выбран</button>' : '<button class="action-btn btn-select">Выбрать</button>'}
-            `;
-            container.appendChild(card);
-        });
-
-        document.getElementById('start-battle-btn').disabled = !selectedHeroId;
-    }
-
-    function selectHero(id) {
-        selectedHeroId = id;
-        renderHeroes();
-    }
-
-    // --- Drawing Logic ---
-    let canvas, ctx, isDrawing = false;
-    let drawColor = 'black';
-
-    function setCreateMode(mode) {
-        document.getElementById('ai-mode').style.display = mode === 'ai' ? 'block' : 'none';
-        document.getElementById('draw-mode').style.display = mode === 'draw' ? 'block' : 'none';
-        
-        const btns = document.querySelectorAll('#create .tab-btn');
-        btns.forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-    }
-
-    function setupCanvas() {
-        canvas = document.getElementById('drawCanvas');
-        ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.lineWidth = 5;
-        ctx.lineCap = 'round';
-
-        // Mouse events
-        canvas.addEventListener('mousedown', startDraw);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDraw);
-        canvas.addEventListener('mouseout', stopDraw);
-        
-        // Touch events
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousedown', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const mouseEvent = new MouseEvent('mousemove', {
-                clientX: touch.clientX,
-                clientY: touch.clientY
-            });
-            canvas.dispatchEvent(mouseEvent);
-        });
-        canvas.addEventListener('touchend', () => {
-            const mouseEvent = new MouseEvent('mouseup', {});
-            canvas.dispatchEvent(mouseEvent);
-        });
-    }
-
-    function startDraw(e) {
-        isDrawing = true;
-        ctx.beginPath();
-        ctx.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
-    }
-
-    function draw(e) {
-        if (!isDrawing) return;
-        ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
-        ctx.stroke();
-    }
-
-    function stopDraw() {
-        isDrawing = false;
-    }
-
-    function setColor(color) {
-        drawColor = color;
-        ctx.strokeStyle = color;
-        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
-    }
-
-    function clearCanvas() {
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function saveDrawing() {
-        const dataURL = canvas.toDataURL();
-        const name = prompt("Введите имя героя:", generateName());
-        if (name) {
-            createHero('draw', { image: dataURL, name: name });
-            clearCanvas();
-            switchTab('heroes');
-        }
-    }
-
-    // --- Shop Logic ---
-    function renderShop() {
-        const container = document.getElementById('shop-list');
-        container.innerHTML = '';
-        
-        state.shopItems.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `
-                <div>
-                    <div style="font-weight:bold; color:var(--primary)">${item.name}</div>
-                    <div style="font-size:0.8rem; color:#aaa">Увеличивает характеристику навсегда</div>
-                </div>
-                <button class="action-btn" style="width:100px; background:${state.gold >= item.cost ? 'var(--success)' : '#555'}" 
-                    onclick="buyItem(${item.id})" ${state.gold < item.cost ? 'disabled' : ''}>
-                    ${item.cost} 💰
-                </button>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function buyItem(id) {
-        const item = state.shopItems.find(i => i.id === id);
-        if (!item || state.gold < item.cost) return;
-
-        if (!selectedHeroId) {
-            showNotification("Сначала выберите героя!");
-            switchTab('heroes');
-            return;
-        }
-
-        const hero = state.heroes.find(h => h.id === selectedHeroId);
-        if (!hero) return;
-
-        state.gold -= item.cost;
-        
-        if (item.type === 'str') hero.stats.str += item.val;
-        if (item.type === 'spd') hero.stats.spd += item.val;
-        if (item.type === 'mag') hero.stats.mag += item.val;
-
-        saveState();
-        renderShop();
-        renderHeroes();
-        showNotification(`Куплено: ${item.name}`);
-    }
-
-    // --- Quests Logic ---
-    function renderQuests() {
-        const container = document.getElementById('quests-list');
-        container.innerHTML = '';
-        
-        let hasActive = false;
-        state.quests.forEach(q => {
-            if (q.claimed) return;
-            hasActive = true;
-            const div = document.createElement('div');
-            div.className = 'list-item';
-            div.innerHTML = `
-                <div>
-                    <div>${q.text}</div>
-                    <div class="quest-reward">Награда: ${q.reward} 💰</div>
-                </div>
-                <button class="action-btn" style="width:100px;" 
-                    onclick="claimQuest(${q.id})" ${!q.completed ? 'disabled' : ''}>
-                    ${q.completed ? 'Забрать' : 'В прогрессе'}
-                </button>
-            `;
-            container.appendChild(div);
-        });
-
-        if (!hasActive) {
-            container.innerHTML = '<p>Все задания выполнены! Заходите завтра.</p>';
-        }
-    }
-
-    function checkQuestProgress(type) {
-        let updated = false;
-        if (type === 'battle') {
-            const q = state.quests.find(x => x.text.includes("битву"));
-            if (q && !q.completed) { q.completed = true; updated = true; }
-        }
-        if (type === 'create_hero') {
-            const q = state.quests.find(x => x.text.includes("героя"));
-            if (q && !q.completed) { q.completed = true; updated = true; }
-        }
-        if (type === 'gold_check') {
-            const q = state.quests.find(x => x.text.includes("золота"));
-            if (q && !q.completed && state.gold >= 100) { q.completed = true; updated = true; }
-        }
-
-        if (updated) {
-            saveState();
-            if (document.getElementById('quests').classList.contains('active')) renderQuests();
-        }
-    }
-
-    function claimQuest(id) {
-        const q = state.quests.find(x => x.id === id);
-        if (!q || !q.completed || q.claimed) return;
-
-        state.gold += q.reward;
-        q.claimed = true;
-        saveState();
-        renderQuests();
-        showNotification(`Получено ${q.reward} золота!`);
-    }
-
-    // --- Battle System ---
-    function startGame() {
-        if (!selectedHeroId) return;
-        const hero = state.heroes.find(h => h.id === selectedHeroId);
-        
-        // Generate Enemy
-        const enemyPower = Math.floor((hero.stats.str + hero.stats.spd + hero.stats.mag) / 3);
-        const enemy = {
-            name: ['Гоблин', 'Орк', 'Скелет', 'Дракончик', 'Тролль'][Math.floor(Math.random()*5)],
-            maxHp: enemyPower * 3,
-            hp: enemyPower * 3,
-            dmg: Math.floor(enemyPower * 0.8)
-        };
-
-        currentBattle = {
-            player: {
-                name: hero.name,
-                maxHp: (hero.stats.str + hero.stats.exp) * 2,
-                hp: (hero.stats.str + hero.stats.exp) * 2,
-                dmg: Math.floor(hero.stats.str * 1.5),
-                speed: hero.stats.spd
-            },
-            enemy: enemy,
-            turn: 0
-        };
-
-        // Setup UI
-        document.getElementById('battle-screen').style.display = 'flex';
-        document.getElementById('battle-player-name').textContent = currentBattle.player.name;
-        document.getElementById('battle-enemy-name').textContent = currentBattle.enemy.name;
-        document.getElementById('battle-log').innerHTML = '<div class="log-sys">Битва началась!</div>';
-        
-        updateBattleUI();
-        document.getElementById('battle-controls').style.display = 'block';
-        document.getElementById('battle-end-controls').style.display = 'none';
-    }
-
-    function updateBattleUI() {
-        const p = currentBattle.player;
-        const e = currentBattle.enemy;
-
-        const pPct = (p.hp / p.maxHp) * 100;
-        const ePct = (e.hp / e.maxHp) * 100;
-
-        document.getElementById('player-hp-bar').style.width = `${Math.max(0, pPct)}%`;
-        document.getElementById('player-hp-text').textContent = `${Math.max(0, p.hp)}/${p.maxHp}`;
-        
-        document.getElementById('enemy-hp-bar').style.width = `${Math.max(0, ePct)}%`;
-        document.getElementById('enemy-hp-text').textContent = `${Math.max(0, e.hp)}/${e.maxHp}`;
-    }
-
-    function logBattle(msg, type) {
-        const log = document.getElementById('battle-log');
-        const div = document.createElement('div');
-        div.className = `log-entry log-${type}`;
-        div.textContent = msg;
-        log.appendChild(div);
-        log.scrollTop = log.scrollHeight;
-    }
-
-    function battleAttack() {
-        if (!currentBattle) return;
-
-        // Player Turn
-        const dmg = currentBattle.player.dmg + Math.floor(Math.random() * 5);
-        currentBattle.enemy.hp -= dmg;
-        logBattle(`Вы нанесли ${dmg} урона!`, 'player');
-        
-        if (currentBattle.enemy.hp <= 0) {
-            endBattle(false, true);
-            return;
-        }
-
-        updateBattleUI();
-
-        // Enemy Turn (delayed)
-        setTimeout(() => {
-            if (!currentBattle) return;
-            const enemyDmg = Math.max(1, currentBattle.enemy.dmg - Math.floor(currentBattle.player.stats?.exp / 10)); // Exp reduces dmg slightly
-            currentBattle.player.hp -= enemyDmg;
-            logBattle(`${currentBattle.enemy.name} нанес ${enemyDmg} урона!`, 'enemy');
-            
-            if (currentBattle.player.hp <= 0) {
-                endBattle(false, false);
-            } else {
-                updateBattleUI();
+        // --- ИНИЦИАЛИЗАЦИЯ ---
+        function init() {
+            loadState();
+            if (state.heroes.length === 0) {
+                // Стартовые герои если пусто
+                state.heroes.push(createAIHero('Стартовый Воин', 'Воин'));
+                state.heroes.push(createAIHero('Новичок Маг', 'Маг'));
+                saveState();
             }
-        }, 600);
-    }
-
-    function endBattle(abandoned, won = false) {
-        document.getElementById('battle-screen').style.display = 'none';
-        
-        if (won) {
-            const rewardGold = 20 + Math.floor(Math.random() * 10);
-            state.gold += rewardGold;
-            state.rating += 10;
-            showNotification(`Победа! Получено ${rewardGold} золота`);
-            checkQuestProgress('battle');
-            checkQuestProgress('gold_check');
-        } else if (!abandoned) {
-            showNotification("Поражение! Попробуйте улучшить героя.");
+            if (state.quests.length === 0) refreshQuests();
+            updateUI();
+            renderHeroes();
+            setupCanvas();
         }
 
-        currentBattle = null;
-        saveState();
-    }
+        function loadState() {
+            const saved = localStorage.getItem('dnd_state');
+            if (saved) {
+                state = JSON.parse(saved);
+                // Принудительный сброс ресурсов при загрузке (по запросу "обнули счет")
+                // Если нужно сохранять прогресс, закомментируй следующие 3 строки:
+                state.gold = 0;
+                state.gems = 0;
+                state.tickets = 0;
+            }
+        }
 
-    // Start
-    init();
+        function saveState() {
+            localStorage.setItem('dnd_state', JSON.stringify(state));
+            updateUI();
+        }
 
-</script>
+        // --- УЛУЧШЕННЫЙ ИИ ГЕРАТОР ---
+        function createAIHero(forcedName = null, forcedClass = null) {
+            const clsData = forcedClass 
+                ? CLASSES.find(c => c.name === forcedClass) || CLASSES[0]
+                : CLASSES[Math.floor(Math.random() * CLASSES.length)];
+            
+            const name = forcedName || `${NAMES_PREFIX[Math.floor(Math.random()*NAMES_PREFIX.length)]} ${NAMES_BASE[Math.floor(Math.random()*NAMES_BASE.length)]}`;
+            
+            // Базовые случайные значения (40-80)
+            let baseStr = Math.floor(Math.random() * 40) + 40;
+            let baseSpd = Math.floor(Math.random() * 40) + 40;
+            let baseMag = Math.floor(Math.random() * 40) + 40;
+            let baseExp = Math.floor(Math.random() * 40) + 40;
+
+            // Применение модификаторов класса
+            let str = Math.floor(baseStr * clsData.strMod);
+            let spd = Math.floor(baseSpd * clsData.spdMod);
+            let mag = Math.floor(baseMag * clsData.magMod);
+            let exp = Math.floor(baseExp * clsData.expMod);
+
+            // БАЛАНСИРОВКА (ДЕБАФФ): Если сумма > 280, режем самую высокую статку на 30%
+            let total = str + spd + mag + exp;
+            if (total > 280) {
+                const stats = { str, spd, mag, exp };
+                let maxStat = 'str';
+                let maxVal = str;
+                if (spd > maxVal) { maxStat = 'spd'; maxVal = spd; }
+                if (mag > maxVal) { maxStat = 'mag'; maxVal = mag; }
+                if (exp > maxVal) { maxStat = 'exp'; maxVal = exp; }
+                
+                stats[maxStat] = Math.floor(stats[maxStat] * 0.7); // Дебафф
+                
+                str = stats.str; spd = stats.spd; mag = stats.mag; exp = stats.exp;
+            }
+
+            // Генерация простой картинки (цветной круг с буквой)
+            const color = `hsl(${Math.random()*360}, 70%, 50%)`;
+            const initial = name.charAt(0);
+            const imgData = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='${encodeURIComponent(color)}'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='white' font-weight='bold'%3E${initial}%3C/text%3E%3C/svg%3E`;
+
+            return {
+                id: Date.now() + Math.random(),
+                name: name,
+                class: clsData.name,
+                stats: { str, spd, mag, exp },
+                hp: 100 + Math.floor(str * 2), // Здоровье зависит от силы
+                maxHp: 100 + Math.floor(str * 2),
+                img: imgData,
+                isCustom: false
+            };
+        }
+
+        function generateAIHero() {
+            const hero = createAIHero();
+            state.heroes.push(hero);
+            saveState();
+            renderHeroes();
+            alert(`Создан новый герой: ${hero.name} (${hero.class})!`);
+        }
+
+        // --- ОТРИСОВКА ИНТЕРФЕЙСА ---
+        function updateUI() {
+            document.getElementById('gold').innerText = state.gold;
+            document.getElementById('gems').innerText = state.gems;
+            document.getElementById('tickets').innerText = state.tickets;
+            
+            const selInfo = document.getElementById('selected-hero-info');
+            if (state.selectedHeroId) {
+                const h = state.heroes.find(x => x.id === state.selectedHeroId);
+                if (h) selInfo.innerText = `Выбран: ${h.name} (HP: ${h.hp})`;
+                else selInfo.innerText = "Герой потерян";
+            } else {
+                selInfo.innerText = "Выберите героя для боя";
+            }
+        }
+
+        function renderHeroes() {
+            const container = document.getElementById('tab-gallery');
+            container.innerHTML = '';
+            
+            state.heroes.forEach(hero => {
+                const card = document.createElement('div');
+                card.className = `hero-card ${state.selectedHeroId === hero.id ? 'selected' : ''}`;
+                card.onclick = () => selectHero(hero.id);
+                
+                card.innerHTML = `
+                    <img src="${hero.img}" class="hero-img" alt="hero">
+                    <div class="hero-name">${hero.name}</div>
+                    <div class="hero-class">${hero.class}</div>
+                    <div class="stats-grid">
+                        <div class="stat-row"><span>⚔️ Сила</span> <span class="stat-val stat-str">${hero.stats.str}</span></div>
+                        <div class="stat-row"><span>⚡ Скор</span> <span class="stat-val stat-spd">${hero.stats.spd}</span></div>
+                        <div class="stat-row"><span>🔮 Маг</span> <span class="stat-val stat-mag">${hero.stats.mag}</span></div>
+                        <div class="stat-row"><span>⭐ Опыт</span> <span class="stat-val stat-exp">${hero.stats.exp}</span></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectHero(id) {
+            state.selectedHeroId = id;
+            saveState();
+            renderHeroes();
+        }
+
+        function switchScreen(screenName, btn) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`screen-${screenName}`).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+
+            if(screenName === 'quests') renderQuests();
+        }
+
+        function showTab(tabName) {
+            document.getElementById('tab-gallery').style.display = tabName === 'gallery' ? 'grid' : 'none';
+            document.getElementById('tab-draw').style.display = tabName === 'draw' ? 'flex' : 'none';
+        }
+
+        // --- МАГАЗИН И ЗАДАНИЯ ---
+        function buyItem(type, amount, cost) {
+            if (state.gems >= cost) {
+                state.gems -= cost;
+                if (type === 'gold') state.gold += amount;
+                if (type === 'ticket') state.tickets += amount;
+                if (type === 'chest') {
+                    state.gold += Math.floor(Math.random() * 50);
+                    alert("Из сундука выпало немного золота!");
+                }
+                saveState();
+                alert("Покупка успешна!");
+            } else {
+                alert("Недостаточно гемов!");
+            }
+        }
+
+        function refreshQuests() {
+            const questTypes = ['Победить в бою', 'Накопить золото', 'Создать героя'];
+            state.quests = [];
+            for(let i=0; i<3; i++) {
+                state.quests.push({
+                    id: i,
+                    text: questTypes[Math.floor(Math.random()*questTypes.length)],
+                    reward: Math.floor(Math.random() * 20) + 10,
+                    completed: false
+                });
+            }
+            saveState();
+            renderQuests();
+        }
+
+        function renderQuests() {
+            const list = document.getElementById('quests-list');
+            list.innerHTML = '';
+            state.quests.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'quest-item';
+                div.innerHTML = `
+                    <div>
+                        <strong>${q.text}</strong><br>
+                        <small>Награда: ${q.reward} 💰</small>
+                    </div>
+                    <button class="btn-claim" ${q.completed ? 'disabled style="background:#555"' : ''} 
+                        onclick="claimQuest(${q.id})">
+                        ${q.completed ? 'Выполнено' : 'Забрать'}
+                    </button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function claimQuest(id) {
+            const q = state.quests.find(x => x.id === id);
+            if (q && !q.completed) {
+                q.completed = true;
+                state.gold += q.reward;
+                saveState();
+                renderQuests();
+            }
+        }
+
+        // --- РИСОВАНИЕ ---
+        let canvas, ctx, drawing = false;
+        let currentColor = 'black';
+
+        function setupCanvas() {
+            canvas = document.getElementById('drawCanvas');
+            ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 5;
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseout', stopDraw);
+            
+            // Touch support
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent('mousedown', {
+                    clientX: touch.clientX, clientY: touch.clientY
+                });
+                canvas.dispatchEvent(mouseEvent);
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent('mousemove', {
+                    clientX: touch.clientX, clientY: touch.clientY
+                });
+                canvas.dispatchEvent(mouseEvent);
+            });
+            canvas.addEventListener('touchend', () => {
+                const mouseEvent = new MouseEvent('mouseup', {});
+                canvas.dispatchEvent(mouseEvent);
+            });
+        }
+
+        function setColor(color, btn) {
+            currentColor = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function startDraw(e) {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            ctx.strokeStyle = currentColor;
+            ctx.lineTo(e.clientX - canvas.getBoundingClientRect().left, e.clientY - canvas.getBoundingClientRect().top);
+            ctx.stroke();
+        }
+
+        function stopDraw() {
+            drawing = false;
+        }
+
+        function saveDrawing() {
+            const name = document.getElementById('heroNameInput').value || "Нарисованный Герой";
+            const imgData = canvas.toDataURL();
+            
+            // Создаем героя с урезанными статами для баланса (ручная работа не должна быть имбой)
+            const hero = {
+                id: Date.now(),
+                name: name,
+                class: "Самодельный",
+                stats: { 
+                    str: Math.floor(Math.random() * 50) + 30, 
+                    spd: Math.floor(Math.random() * 50) + 30, 
+                    mag: Math.floor(Math.random() * 50) + 30, 
+                    exp: Math.floor(Math.random() * 50) + 30 
+                },
+                hp: 150,
+                maxHp: 150,
+                img: imgData,
+                isCustom: true
+            };
+            
+            state.heroes.push(hero);
+            saveState();
+            renderHeroes();
+            showTab('gallery');
+            document.getElementById('heroNameInput').value = '';
+            clearCanvas();
+            alert("Герой сохранен в галерею!");
+        }
+
+        // --- БОЕВАЯ СИСТЕМА ---
+        let battleState = {};
+
+        function startBattle() {
+            if (!state.selectedHeroId) {
+                alert("Сначала выберите героя в галерее!");
+                return;
+            }
+            if (state.tickets <= 0) {
+                if(!confirm("Нет билетов! Хотите купить за 5 гемов?")) return;
+                if(state.gems >= 5) {
+                    state.gems -= 5;
+                    state.tickets += 1;
+                    saveState();
+                } else {
+                    alert("Недостаточно гемов!");
+                    return;
+                }
+            }
+
+            state.tickets--;
+            saveState();
+
+            const player = state.heroes.find(h => h.id === state.selectedHeroId);
+            // Клонируем объект чтобы не менять оригинал во время боя
+            const playerBattle = JSON.parse(JSON.stringify(player));
+            playerBattle.currentHp = playerBattle.hp;
+
+            // Генерация врага
+            const enemy = createAIHero();
+            enemy.currentHp = enemy.hp;
+            // Враг чуть слабее для баланса
+            enemy.stats.str = Math.floor(enemy.stats.str * 0.9);
+            enemy.stats.spd = Math.floor(enemy.stats.spd * 0.9);
+
+            battleState = {
+                player: playerBattle,
+                enemy: enemy,
+                turn: 1
+            };
+
+            // UI Боя
+            document.getElementById('battle-player-name').innerText = player.name;
+            document.getElementById('battle-player-img').src = player.img;
+            document.getElementById('battle-enemy-name').innerText = enemy.name;
+            document.getElementById('battle-enemy-img').src = enemy.img;
+            
+            document.getElementById('battle-log').innerHTML = '<div class="log-entry">Бой начался!</div>';
+            
+            updateBattleHP();
+            switchScreen('battle', null);
+            document.getElementById('btn-attack').disabled = false;
+        }
+
+        function updateBattleHP() {
+            const p = battleState.player;
+            const e = battleState.enemy;
+            
+            const pPct = (p.currentHp / p.maxHp) * 100;
+            const ePct = (e.currentHp / e.maxHp) * 100;
+            
+            document.getElementById('player-hp').style.width = `${Math.max(0, pPct)}%`;
+            document.getElementById('enemy-hp').style.width = `${Math.max(0, ePct)}%`;
+            
+            document.getElementById('player-hp-text').innerText = `${Math.max(0, p.currentHp)}/${p.maxHp}`;
+            document.getElementById('enemy-hp-text').innerText = `${Math.max(0, e.currentHp)}/${e.maxHp}`;
+        }
+
+        function log(msg, type) {
+            const logEl = document.getElementById('battle-log');
+            const div = document.createElement('div');
+            div.className = `log-entry ${type === 'player' ? 'log-player' : 'log-enemy'}`;
+            div.innerText = msg;
+            logEl.appendChild(div);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function battleAttack() {
+            document.getElementById('btn-attack').disabled = true;
+            
+            const p = battleState.player;
+            const e = battleState.enemy;
+
+            // Ход игрока
+            // Урон = Сила + (Магия / 2) + Рандом
+            const dmgPlayer = Math.floor(p.stats.str + (p.stats.mag * 0.5) + (Math.random() * 10));
+            e.currentHp -= dmgPlayer;
+            log(`Вы нанесли ${dmgPlayer} урона!`, 'player');
+            
+            updateBattleHP();
+
+            if (e.currentHp <= 0) {
+                setTimeout(() => endBattle(true), 1000);
+                return;
+            }
+
+            // Ход врага (через паузу)
+            setTimeout(() => {
+                const dmgEnemy = Math.floor(e.stats.str + (e.stats.mag * 0.5) + (Math.random() * 10));
+                // Защита от скорости (шанс уклониться)
+                const dodgeChance = p.stats.spd / 5; // 100 спид = 20% шанс
+                if (Math.random() * 100 < dodgeChance) {
+                    log(`Вы уклонились от атаки врага!`, 'player');
+                } else {
+                    p.currentHp -= dmgEnemy;
+                    log(`Враг нанес вам ${dmgEnemy} урона!`, 'enemy');
+                }
+                
+                updateBattleHP();
+                
+                if (p.currentHp <= 0) {
+                    setTimeout(() => endBattle(false), 1000);
+                } else {
+                    document.getElementById('btn-attack').disabled = false;
+                }
+            }, 800);
+        }
+
+        function endBattle(win) {
+            if (win) {
+                log("ПОБЕДА! Вы получили 20 золота.", 'player');
+                state.gold += 20;
+                // Шанс получить задание
+                if(state.quests.some(q => q.text === 'Победить в бою' && !q.completed)) {
+                    claimQuest(state.quests.find(q => q.text === 'Победить в бою').id);
+                }
+                alert("Победа! +20 Золота");
+            } else {
+                log("ПОРАЖЕНИЕ...", 'enemy');
+                alert("Вы проиграли. Попробуйте снова!");
+            }
+            saveState();
+            switchScreen('heroes', document.querySelector('.nav-btn')); // Возврат в меню
+        }
+
+        // Запуск
+        init();
+
+    </script>
 </body>
 </html>
